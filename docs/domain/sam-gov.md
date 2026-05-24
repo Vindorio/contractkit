@@ -58,9 +58,16 @@ The gem should not assume which tier the user has. Surface a `RateLimitError` wi
 
 Offset/limit. The relevant params:
 
-- `limit` — page size; max **1000** (yes, really; most callers cap themselves much lower).
+- `limit` — page size; max **1000** (yes, really; the gem defaults to 1000).
 - `offset` — zero-based row index of the first record in the page.
 - Response includes `totalRecords` so you can compute total pages.
+
+**Gem batch pagination (per [#32](../../ISSUES.md)):** `Sam::Client#search`
+yields one batch per API page via a block, auto-paginating until exhausted
+or the optional `limit:` cap is reached. Batch size matches the upstream
+page size (default 1000). Memory cost is one page at a time — pages are
+never accumulated into memory. Pass no block to get a lazy Enumerator
+that yields one batch per call.
 
 **Quirks:**
 - Offsets near the tail (`offset > 9000`) get noticeably slower.

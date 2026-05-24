@@ -39,22 +39,50 @@ RSpec.describe Contractkit::Usaspending::Client do
     end
   end
 
-  describe "#search (lazy pagination)", :vcr do
-    it "walks page_metadata.hasNext across multiple pages" do
-      results = described_class.new
-                               .search(
-                                 filters: {
-                                   naics_codes: ["541512"],
-                                   time_period: [
-                                     { start_date: "2026-01-01", end_date: "2026-03-31" }
-                                   ]
-                                 },
-                                 limit: 3
-                               )
-                               .take(8)
+  describe "#search batch pagination", :vcr do
+    it "yields one batch per API page (block form)" do
+      batches = []
+      described_class.new.search(
+        filters: {
+          naics_codes: ["541512"],
+          time_period: [{ start_date: "2026-01-01", end_date: "2026-03-31" }]
+        },
+        per_page: 3
+      ) do |batch|
+        batches << batch
+        break if batches.size >= 2 # keep the cassette small
+      end
 
-      expect(results.size).to be > 3
-      expect(results).to all(be_a(Hash))
+      expect(batches.size).to eq(2)
+      expect(batches).to all(be_an(Array))
+      expect(batches.first.first).to be_a(Hash)
+    end
+
+    it "returns an Enumerator when no block given" do
+      enum = described_class.new.search(
+        filters: {
+          naics_codes: ["541512"],
+          time_period: [{ start_date: "2026-01-01", end_date: "2026-03-31" }]
+        },
+        per_page: 3
+      )
+
+      expect(enum).to be_an(Enumerator)
+      expect(enum.first).to be_an(Array)
+    end
+
+    it "honors limit to cap total records" do
+      total = 0
+      described_class.new.search(
+        filters: {
+          naics_codes: ["541512"],
+          time_period: [{ start_date: "2026-01-01", end_date: "2026-03-31" }]
+        },
+        per_page: 3,
+        limit: 5
+      ) { |batch| total += batch.size }
+
+      expect(total).to eq(5)
     end
   end
 
