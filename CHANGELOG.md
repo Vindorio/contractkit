@@ -6,7 +6,69 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-_No changes yet._
+### Added — M4: Recompete & Pricing Intelligence
+
+- **Award expansion** (#36): `Contractkit::Award` gains the full
+  three-tier pricing surface (`obligated_amount` ≤
+  `base_and_exercised_options_value` ≤ `base_and_all_options_value` /
+  `total_contract_value`) plus competition fields
+  (`number_of_offers_received`, `extent_competed`,
+  `type_of_contract_pricing`, `contract_award_type`,
+  `solicitation_procedures`). Competition fields populate only via the
+  new `ResponseParser.parse_detail` path; bulk search rows leave them
+  nil. See `docs/domain/award-pricing.md`.
+- **IDV model** (#37): new `Contractkit::Idv` for indefinite-delivery
+  vehicles (IDC / GWAC / BPA / BOA / FSS). Carries `last_date_to_order`
+  — the primary recompete signal. `Contractkit::Idv.search` auto-injects
+  `IDV_AWARD_TYPE_CODES` into the USASpending filter. `Award#parent_idv`
+  and `Idv#child_awards` traverse the parent/child relationship.
+  See `docs/domain/idvs.md`.
+- **Transaction model** (#38): new `Contractkit::Transaction` for
+  per-modification history from `/api/v2/transactions/`.
+  `Award#transactions` and `Idv#transactions` lazy-fetch the stream.
+  Surfaces raw `action_type` (CodedValue) — no option-exercise inference.
+  See `docs/domain/transactions.md`.
+- **Recipient enrichment** (#39): `Contractkit::Recipient` gains SAM
+  Entity Management fields (registration_status, sam_expiration_date,
+  cage_code, business_types, sba_business_types, naics_list,
+  exclusion_status_flag, immediate_owner, highest_owner, …) plus
+  `#excluded?` / `#registration_expired?` predicates. New
+  `Contractkit::Sam::Entities` client + parser + `Recipient.find_entity`.
+  USASpending-built recipients stay un-enriched; enrichment is opt-in.
+  See `docs/domain/entities.md`.
+- **Subaward model** (#40): new `Contractkit::Subaward` for one-level
+  prime → sub teaming from `/api/v2/search/spending_by_subaward/`.
+  `Award#subawards` lazy-fetches. FFATA threshold + reporting-compliance
+  caveats documented; multi-tier explicitly out of scope.
+  See `docs/domain/subawards.md`.
+- **Recompete helper** (#41): new `Contractkit::Recompete.expiring(within:)`
+  — time-forward sibling of `CrossReference.awards_for`. Pairs each
+  expiring IDV / contract with matching active SAM solicitations using
+  the same `match:` vocabulary. Block + Enumerator forms; streams
+  without accumulating. `within:` accepts plain Integer (months) or any
+  object responding to `#in_months` (so ActiveSupport::Duration works
+  without a hard dependency). See `docs/domain/recompete.md`.
+- New value object `Contractkit::CodedValue` for `(code, description)`
+  pairs across the M4 fields (extent_competed, type_of_contract_pricing,
+  action_type, business_types, …).
+- New value object `Contractkit::OwnerReference` for SAM corporate
+  hierarchy.
+
+### Changed
+
+- `Contractkit::CrossReference::DEFAULT_ENDING_WINDOW_MONTHS` is now
+  `12` (was 24, reserved). The comment is updated to point at
+  `Contractkit::Recompete` for the time-forward helper that consumes it.
+
+### Deferred — follow-up issues to file from PR
+
+- Dedicated `Contractkit::Sam::Exclusions` client for historical /
+  multi-record exclusion lookup. M4 ships exclusion *status* via the
+  Entities response; the historical surface is filed separately.
+- Live VCR cassettes for SAM Entities and the USASpending detail /
+  transactions / subawards endpoints. M4 ships with synthetic
+  fixture-driven specs — recording against the live APIs requires
+  credentials we don't have in this branch.
 
 ## [0.1.0] - 2026-05-24
 
