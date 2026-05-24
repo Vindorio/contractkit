@@ -12,6 +12,7 @@ require_relative "contractkit/http/cache_middleware"
 require_relative "contractkit/http/connection"
 require_relative "contractkit/sam/client"
 require_relative "contractkit/usaspending/client"
+require_relative "contractkit/agency"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
 module Contractkit

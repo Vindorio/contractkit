@@ -21,7 +21,11 @@ module Contractkit
       retries: 3,
       logger: nil,
       cache: nil,
-      cache_ttl: 0
+      cache_ttl: 0,
+      # Consumer agency-alias overrides. Maps alias string -> canonical
+      # code; mutate via merge!. Takes precedence over the shipped baseline
+      # in Contractkit::Agency.normalize.
+      agency_aliases: {}
     }.freeze
 
     OPTIONS = DEFAULTS.keys.freeze
@@ -33,7 +37,12 @@ module Contractkit
     def initialize(**overrides)
       @monitor = Monitor.new
 
-      DEFAULTS.each { |k, v| instance_variable_set("@#{k}", v) }
+      DEFAULTS.each do |k, v|
+        # Dup mutable defaults so per-instance mutation doesn't leak into
+        # the shared DEFAULTS hash. agency_aliases is the canonical
+        # example — consumers .merge! into it.
+        instance_variable_set("@#{k}", v.is_a?(Hash) || v.is_a?(Array) ? v.dup : v)
+      end
       # Pick up the conventional env var on construction (consumers may
       # still override via the block).
       @sam_api_key = ENV.fetch("SAM_API_KEY", @sam_api_key)
