@@ -8,6 +8,7 @@ require_relative "contractkit/instrumentation"
 require_relative "contractkit/http/redactor"
 require_relative "contractkit/http/rate_limiter"
 require_relative "contractkit/http/instrumentation_middleware"
+require_relative "contractkit/http/cache_middleware"
 require_relative "contractkit/http/connection"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
