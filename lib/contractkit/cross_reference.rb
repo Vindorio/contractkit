@@ -7,8 +7,11 @@ module Contractkit
   module CrossReference
     # Default historical-award lookback for {.awards_for}, in years.
     DEFAULT_LOOKBACK_YEARS = 5
-    # Reserved for v0.2 recompete-window refinement.
-    DEFAULT_ENDING_WINDOW_MONTHS = 24
+    # Default forward window (months) for recompete detection. The
+    # value lives here because it pairs with DEFAULT_LOOKBACK_YEARS as
+    # part of the same cross-reference vocabulary, but the time-forward
+    # helper itself is {Contractkit::Recompete.expiring}.
+    DEFAULT_ENDING_WINDOW_MONTHS = 12
     # Default match keys: agency + NAICS (the workhorse join).
     DEFAULT_MATCH = %i[agency naics].freeze
     # Default cap on related awards returned by {.awards_for}.
