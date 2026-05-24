@@ -165,4 +165,4 @@ These are intentional non-goals; revisiting any of them requires a design discus
 >
 > ⚠️ FILL IN: Decide whether `data/` JSON files are loaded eagerly at require-time or lazily on first access. (Eager is simpler; lazy is friendlier to one-off scripts.)
 >
-> ⚠️ FILL IN: Document the Ruby version floor (Ruby 3.1+ in the original scope doc — confirm and pin in gemspec).
+**Ruby version floor:** `>= 3.2.0`. Pinned in `contractkit.gemspec` (`required_ruby_version`) and `.rubocop.yml` (`TargetRubyVersion`). Original scope mentioned 3.1+; bumped during M0 scaffolding because Ruby 3.1 went EOL March 2025 and bundler 4.x dropped 3.1 support.
