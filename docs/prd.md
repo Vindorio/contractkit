@@ -81,7 +81,7 @@ Mapped to the milestone structure ([[ISSUES]] has the 30 filed issues).
 
 ### M0 — Scaffolding
 - Standard gem packaging: `gemspec`, `Gemfile`, `Rakefile`, MIT license
-- GitHub Actions CI matrixed across Ruby 3.1-3.4
+- GitHub Actions CI matrixed across Ruby 3.2-3.4 (3.1 dropped — EOL March 2025; bundler 4 requires 3.2+)
 - RSpec + VCR + WebMock with hermetic no-real-HTTP testing (VCR cassettes for happy paths; WebMock for error/edge cases)
 - YARD with a coverage gate
 - README, CHANGELOG, CONTRIBUTING

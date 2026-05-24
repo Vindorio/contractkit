@@ -137,9 +137,9 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 ### Ruby matrix
 
-Match upstream's still-supported MRI line. As of late 2025, that's 3.1, 3.2, 3.3, 3.4. Ruby 3.4 is the current stable. Drop 3.1 when its security support ends (per Ruby's policy, ~end of March 2027).
+Match upstream's still-supported MRI line. As of May 2026, that's **3.2, 3.3, 3.4** (3.1 went EOL March 2025; bundler 4.x dropped 3.1 support entirely). Ruby 3.4 is the current stable. Ruby 4.0 has shipped but is not in the matrix yet — add as a non-blocking row when at least one dep we use has tested against it.
 
-> ⚠️ FILL IN: Confirm the exact end-of-security-support dates for Ruby 3.1 and 3.2 at the time of v0.1 release, and document the gem's "drop a Ruby version" policy in `CHANGELOG.md` (likely: drop in a MINOR release, never a patch).
+**Drop-a-Ruby-version policy:** drop in a MINOR release with one full release of overlap warning. Never in a PATCH. Document in `CHANGELOG.md` under a "Removed" section.
 
 ### Jobs
 
@@ -172,7 +172,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.1", "3.2", "3.3", "3.4"]
+        ruby: ["3.2", "3.3", "3.4"]
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -264,7 +264,7 @@ The README is the gem's storefront. It must read credibly on day one — install
 - **Banner** — gem name, one-line tagline ("A Ruby client for SAM.gov and USASpending.gov.").
 - **Badges** — CI status, gem version, Ruby versions supported, license. Nothing aspirational; only badges that resolve on day one.
 - **Why this exists** — One paragraph. Government procurement data lives in two APIs with inconsistent shapes, undocumented quirks, and no shared identifier; `contractkit` normalises both so Ruby apps can treat them as one source.
-- **Installation** — `gem install contractkit` plus the `Gemfile` snippet, with Ruby 3.1+ floor noted.
+- **Installation** — `gem install contractkit` plus the `Gemfile` snippet, with Ruby 3.2+ floor noted.
 - **Configuration** — Global `Contractkit.configure` block; mention `SAM_GOV_API_KEY` env var; note USASpending.gov needs no auth.
 - **Quick start** — Three short examples a reader can copy verbatim: (1) search opportunities by NAICS, (2) look up an award by ID, (3) cross-reference an opportunity to historical awards.
 - **Core concepts** — Brief: resources, models, lazy pagination, errors, caching. Each one-paragraph with a link to the relevant `docs/` file.

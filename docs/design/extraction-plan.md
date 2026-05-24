@@ -172,7 +172,7 @@ Vindor logs via `ApplicationJob#log` and `log_progress` — Rails logger output.
 ### What could derail v0.1.0
 
 - **Trying to ship #4 (agency aliases) and #7 (PSC) in v0.1.0.** Both are data-curation projects, not code projects, and will eat weeks. Defer.
-- **Trying to support Ruby <3.1 to humor a downstream consumer.** Don't. The architecture overview pins 3.1+; hold the line.
+- **Trying to support Ruby <3.2 to humor a downstream consumer.** Don't. The architecture overview pins 3.2+; hold the line. (Original scope said 3.1+; bumped during M0 because Ruby 3.1 is EOL and bundler 4.x dropped 3.1.)
 - **Building a Rails Railtie because Vindor is Rails.** Vindor can wire the gem into Rails with five lines of initializer code. A Railtie locks the gem into Rails update cycles for no real benefit.
 
 > ⚠️ FILL IN: Confirm whether Vindor's `Errors::Redactor` (referenced in `app/lib/api_client.rb` but not read in this pass) has logic worth lifting beyond "regex out API keys". If yes, add a #15 row above as **Extract**.
