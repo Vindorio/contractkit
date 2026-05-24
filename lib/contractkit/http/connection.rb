@@ -40,8 +40,13 @@ module Contractkit
         Faraday::RetriableResponse
       ].freeze
 
+      # HTTP status codes worth retrying. 5xx only; 4xx (including 429)
+      # is handled by the rate-limiter middleware.
       RETRY_STATUSES = [500, 502, 503, 504].freeze
 
+      # Builds the keyword-args hash passed to faraday-retry. Extracted
+      # to a method to keep {.build}'s Faraday block under the
+      # Metrics/BlockLength cap.
       def self.retry_options_for(config)
         {
           max: config.retries,
@@ -55,6 +60,8 @@ module Contractkit
         }
       end
 
+      # Wired into faraday-retry's retry_block hook; fires a
+      # contractkit.retry instrumentation event per attempt.
       def self.emit_retry_event(env:, retry_count:, exception:, will_retry_in:, **)
         Contractkit::Instrumentation.emit(
           "contractkit.retry",

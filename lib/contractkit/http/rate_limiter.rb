@@ -103,6 +103,10 @@ module Contractkit
         @monitor  = Monitor.new
       end
 
+      # Faraday middleware entry point. Blocks (sleeps) when the
+      # per-host bucket is empty; raises {Contractkit::RateLimitError}
+      # variants when the upstream returns 429 (after draining the
+      # bucket by Retry-After).
       def call(env)
         wait = bucket_for(env.url.host)&.take
         if wait&.positive?

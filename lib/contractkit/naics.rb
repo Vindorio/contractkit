@@ -27,6 +27,7 @@ module Contractkit
       freeze
     end
 
+    # @return [Hash] flat hash of all fields (for serialization).
     def to_h
       {
         code: code, title: title,
@@ -52,15 +53,18 @@ module Contractkit
       )
     end
 
+    # Value-equality by 6-digit code.
     def ==(other)
       other.is_a?(Naics) && code == other.code
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       code.hash
     end
 
+    # Path to the shipped NAICS 2022 JSON (see {Contractkit::Naics.all}).
     DATA_PATH = File.expand_path("data/naics_2022.json", __dir__)
 
     class << self

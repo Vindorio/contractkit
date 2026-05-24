@@ -64,19 +64,32 @@ module Contractkit
   # class would conflict with the cross-API hierarchy. To catch any SAM
   # error in one rescue clause, use `rescue Contractkit::Error => e` and
   # check `e.endpoint` for the host.
+  # SAM.gov-specific error variants. Each inherits from the cross-API
+  # parent in {Contractkit} so callers can `rescue Contractkit::RateLimitError`
+  # broadly or `rescue Contractkit::Sam::RateLimitError` narrowly.
   module Sam
+    # SAM-specific 404 (resource not found).
     class NotFoundError          < Contractkit::NotFoundError; end
+    # SAM-specific 401/403/404-from-bad-key.
     class AuthenticationError    < Contractkit::AuthenticationError; end
+    # SAM-specific 5xx after retries exhausted.
     class ServerError            < Contractkit::ServerError; end
+    # SAM-specific non-JSON or otherwise unparseable response body.
     class MalformedResponseError < Contractkit::MalformedResponseError; end
+    # SAM-specific 429.
     class RateLimitError         < Contractkit::RateLimitError; end
   end
 
+  # USASpending.gov-specific error variants. USASpending requires no
+  # auth, so no AuthenticationError variant.
   module Usaspending
-    # USASpending requires no auth, so no AuthenticationError variant.
+    # USASpending-specific 404.
     class NotFoundError          < Contractkit::NotFoundError; end
+    # USASpending-specific 5xx after retries.
     class ServerError            < Contractkit::ServerError; end
+    # USASpending-specific non-JSON response.
     class MalformedResponseError < Contractkit::MalformedResponseError; end
+    # USASpending-specific 429.
     class RateLimitError         < Contractkit::RateLimitError; end
   end
 end

@@ -14,7 +14,9 @@ module Contractkit
     #
     # See docs/domain/usaspending.md for endpoint behavior and quirks.
     class Client
+      # USASpending.gov v2 API base URL.
       BASE_URL = "https://api.usaspending.gov/api/v2"
+      # Spending-by-award POST endpoint path.
       SEARCH_PATH = "/search/spending_by_award/"
       RECIPIENT_PATH = "/recipient/duns" # legacy "duns" path; the API moved to UEI but kept the URL
 

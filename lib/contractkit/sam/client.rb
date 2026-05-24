@@ -13,6 +13,7 @@ module Contractkit
     # Single endpoint surfaced for v0.1: GET /opportunities/v2/search.
     # See docs/domain/sam-gov.md for the field dictionary and quirks.
     class Client
+      # SAM.gov Opportunities API search endpoint.
       BASE_URL = "https://api.sam.gov/opportunities/v2/search"
 
       # SAM's date format. Yes, MM/dd/yyyy. Yes, that's different from

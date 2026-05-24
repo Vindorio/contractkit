@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Contractkit
+  # HTTP transport layer: Faraday connection builder, rate-limiter,
+  # cache, instrumentation, and redaction middleware. Internal —
+  # consumers normally don't interact with these directly.
   module Http
     # Single source of truth for "what counts as a secret in our logs."
     #
@@ -9,7 +12,12 @@ module Contractkit
     # If we ever add bodies/headers carrying secrets, extend Redactor first
     # and re-wire the logger filter — never sprinkle redaction at call sites.
     module Redactor
+      # Matches SAM.gov api_key query params; capture group 1 preserves
+      # the `api_key=` prefix so {REPLACEMENT} keeps the param name in
+      # the log line.
       SAM_API_KEY_PATTERN = /(api_key=)([^&\s"]+)/
+      # The replacement string fed to gsub — keeps the param key,
+      # masks the value.
       REPLACEMENT = '\1[REDACTED]'
 
       # Wires the redaction filter into a Faraday::Logger middleware.

@@ -87,11 +87,13 @@ module Contractkit
       }
     end
 
+    # Value-equality by SAM noticeId.
     def ==(other)
       other.is_a?(Opportunity) && notice_id == other.notice_id
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       notice_id.hash
     end

@@ -18,12 +18,19 @@ module Contractkit
       @per_page = per_page
     end
 
+    # Yields one Award at a time across all matching pages.
+    # @yieldparam award [Contractkit::Award]
+    # @return [Enumerator] when no block given
     def each(&block)
       return enum_for(:each) unless block
 
       each_batch { |batch| batch.each(&block) }
     end
 
+    # Yields one Array<Award> per upstream USASpending page. Batch size
+    # matches the upstream's natural per-page cap (100 by default).
+    # @yieldparam batch [Array<Contractkit::Award>]
+    # @return [Enumerator] when no block given
     def each_batch(&block)
       return enum_for(:each_batch) unless block
 

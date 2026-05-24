@@ -10,8 +10,12 @@ module Contractkit
   # See docs/domain/naics-and-setasides.md for the program-by-program
   # explanation of what each set-aside means.
   module SetAside
+    # Path to the shipped set-aside codes JSON.
     DATA_PATH = File.expand_path("data/set_aside_codes.json", __dir__)
 
+    # Raised when {SetAside.normalize} cannot resolve the input. Inherits
+    # from {Contractkit::Error} so consumers can `rescue Contractkit::Error`
+    # catch-all rather than naming Ruby's ArgumentError.
     class UnknownCode < Contractkit::Error
       def initialize(raw)
         super("unknown set-aside input: #{raw.inspect}")
