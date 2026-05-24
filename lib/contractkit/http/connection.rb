@@ -4,6 +4,8 @@ require "faraday"
 require "faraday/retry"
 require_relative "redactor"
 require_relative "rate_limiter"
+require_relative "instrumentation_middleware"
+require_relative "../instrumentation"
 
 module Contractkit
   module Http
@@ -39,6 +41,29 @@ module Contractkit
 
       RETRY_STATUSES = [500, 502, 503, 504].freeze
 
+      def self.retry_options_for(config)
+        {
+          max: config.retries,
+          interval: 0.25,
+          interval_randomness: 0.5,
+          backoff_factor: 2,
+          exceptions: RETRY_EXCEPTIONS,
+          retry_statuses: RETRY_STATUSES,
+          methods: %i[get post],
+          retry_block: method(:emit_retry_event)
+        }
+      end
+
+      def self.emit_retry_event(env:, retry_count:, exception:, will_retry_in:, **)
+        Contractkit::Instrumentation.emit(
+          "contractkit.retry",
+          url: env.url.to_s,
+          attempt: retry_count,
+          will_retry_in: will_retry_in,
+          reason: exception&.class&.name || "status=#{env.status}"
+        )
+      end
+
       # @param config [Contractkit::Configuration] read-only at build time.
       # @yieldparam builder [Faraday::RackBuilder] for test-only adapter
       #   overrides (specs pass a Faraday::Adapter::Test stub).
@@ -52,14 +77,11 @@ module Contractkit
           # upstream's per-minute cap, retry waiting won't help.
           conn.request :contractkit_rate_limiter
 
-          conn.request :retry,
-                       max: config.retries,
-                       interval: 0.25,
-                       interval_randomness: 0.5, # jitter ±50%
-                       backoff_factor: 2, # 0.25 -> 0.5 -> 1.0
-                       exceptions: RETRY_EXCEPTIONS,
-                       retry_statuses: RETRY_STATUSES,
-                       methods: %i[get post]
+          conn.request :retry, retry_options_for(config)
+
+          # Instrumentation sits after retry so emitted lifecycle events
+          # reflect the final attempt's outcome rather than the first one.
+          conn.request :contractkit_instrumentation
 
           if config.logger
             conn.response :logger, config.logger, { headers: false, bodies: false } do |log|

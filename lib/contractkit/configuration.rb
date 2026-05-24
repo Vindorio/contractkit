@@ -51,6 +51,21 @@ module Contractkit
       define_method(opt) { @monitor.synchronize { instance_variable_get("@#{opt}") } }
     end
 
+    # Registers (or returns) the event-emission callback. With a block,
+    # the block becomes the registered callback. Without one, returns
+    # the currently-registered callback (or nil).
+    #
+    # @example
+    #   Contractkit.configure do |c|
+    #     c.on_event { |name, payload| MyApp::Telemetry.track(name, payload) }
+    #   end
+    def on_event(&block)
+      @monitor.synchronize do
+        @on_event = block if block
+        @on_event
+      end
+    end
+
     # Yields self in a synchronized block so consumers can mutate multiple
     # fields atomically.
     def update
