@@ -1,0 +1,32 @@
+---
+# Hand-crafted cassette. USASpending rarely 500s on demand; synthesizing
+# the response shape lets us verify the gem maps it to ServerError.
+http_interactions:
+- request:
+    method: post
+    uri: https://api.usaspending.gov/api/v2/search/spending_by_award/
+    body:
+      encoding: UTF-8
+      string: ""
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 500
+      message: Internal Server Error
+    headers:
+      Date:
+      - Sun, 24 May 2026 03:00:00 GMT
+      Content-Type:
+      - application/json
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"detail":"Internal server error"}'
+    http_version: '1.1'
+  recorded_at: Sun, 24 May 2026 03:00:00 GMT
+recorded_with: VCR 6.4.0
