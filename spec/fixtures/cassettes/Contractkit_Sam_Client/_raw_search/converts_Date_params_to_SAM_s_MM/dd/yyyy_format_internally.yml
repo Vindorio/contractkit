@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&limit=1&ncode=541512&postedFrom=04/01/2026&postedTo=04/30/2026&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:12:17 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Expires:
+      - '0'
+      X-Envoy-Upstream-Service-Time:
+      - '153'
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - DENY
+      Access-Control-Allow-Headers:
+      - authorization,Access-Control-Allow-Origin,Content-Type,SOAPAction,apikey,Internal-Key,apikey,ApiKey
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Activityid:
+      - d360a20f-731e-4e9e-98dc-cbe1e6952822
+      Access-Control-Expose-Headers:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Server:
+      - istio-envoy
+    body:
+      encoding: ASCII-8BIT
+      string: '{"totalRecords":3,"limit":1,"offset":0,"opportunitiesData":[{"noticeId":"c15ed96359b64d42a068304a9c1c2906","title":"SERV,IRI,1U
+        THEMIS","solicitationNumber":"SPRMM1-26-Q-GB78","fullParentPathName":"DEPT
+        OF DEFENSE.DEFENSE LOGISTICS AGENCY.DLA MARITIME.DLA MARITIME MECHANICSBURG.SPRMM1
+        DLA MECHANICSBURG","fullParentPathCode":"097.97AS.DLA MARITIME.DLA MARITIME
+        MECH.SPRMM1","postedDate":"2026-04-21","type":"Solicitation","baseType":"Solicitation","archiveType":"auto15","archiveDate":"2026-05-30","typeOfSetAsideDescription":null,"typeOfSetAside":null,"responseDeadLine":"2026-05-15T16:30:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"7B22","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"KATHERINE.DAVIES@DLA.MIL","phone":"","title":null,"fullName":"Telephone:
+        6146930001"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=c15ed96359b64d42a068304a9c1c2906","organizationType":"OFFICE","officeAddress":{"zipcode":"17055-0788","city":"MECHANICSBURG","countryCode":"USA","state":"PA"},"placeOfPerformance":{"city":{"code":"3000","name":"Arlington"},"state":{"code":"VA","name":"Virginia"},"country":{"code":"USA","name":"UNITED
+        STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/c15ed96359b64d42a068304a9c1c2906/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=c15ed96359b64d42a068304a9c1c2906&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/54f8dbe062724861936b46b41ab30a3f/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/6b5d7f981650413c8afe8ac7d0263aa3/download"]}],"links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?limit=1&ncode=541512&postedFrom=04%2F01%2F2026&postedTo=04%2F30%2F2026&ptype=p%2Co"}]}'
+  recorded_at: Sun, 24 May 2026 02:12:18 GMT
+recorded_with: VCR 6.4.0

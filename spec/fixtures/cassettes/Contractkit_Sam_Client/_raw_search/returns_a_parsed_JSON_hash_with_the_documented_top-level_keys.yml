@@ -1,0 +1,81 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&limit=5&ncode=541512&postedFrom=04/01/2026&postedTo=04/30/2026&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:12:17 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Expires:
+      - '0'
+      X-Envoy-Upstream-Service-Time:
+      - '97'
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - DENY
+      Access-Control-Allow-Headers:
+      - authorization,Access-Control-Allow-Origin,Content-Type,SOAPAction,apikey,Internal-Key,apikey,ApiKey
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Activityid:
+      - 30b9affa-4a38-4214-91e8-0737a02851b8
+      Access-Control-Expose-Headers:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Server:
+      - istio-envoy
+    body:
+      encoding: ASCII-8BIT
+      string: '{"totalRecords":3,"limit":5,"offset":0,"opportunitiesData":[{"noticeId":"c15ed96359b64d42a068304a9c1c2906","title":"SERV,IRI,1U
+        THEMIS","solicitationNumber":"SPRMM1-26-Q-GB78","fullParentPathName":"DEPT
+        OF DEFENSE.DEFENSE LOGISTICS AGENCY.DLA MARITIME.DLA MARITIME MECHANICSBURG.SPRMM1
+        DLA MECHANICSBURG","fullParentPathCode":"097.97AS.DLA MARITIME.DLA MARITIME
+        MECH.SPRMM1","postedDate":"2026-04-21","type":"Solicitation","baseType":"Solicitation","archiveType":"auto15","archiveDate":"2026-05-30","typeOfSetAsideDescription":null,"typeOfSetAside":null,"responseDeadLine":"2026-05-15T16:30:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"7B22","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"KATHERINE.DAVIES@DLA.MIL","phone":"","title":null,"fullName":"Telephone:
+        6146930001"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=c15ed96359b64d42a068304a9c1c2906","organizationType":"OFFICE","officeAddress":{"zipcode":"17055-0788","city":"MECHANICSBURG","countryCode":"USA","state":"PA"},"placeOfPerformance":{"city":{"code":"3000","name":"Arlington"},"state":{"code":"VA","name":"Virginia"},"country":{"code":"USA","name":"UNITED
+        STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/c15ed96359b64d42a068304a9c1c2906/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=c15ed96359b64d42a068304a9c1c2906&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/54f8dbe062724861936b46b41ab30a3f/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/6b5d7f981650413c8afe8ac7d0263aa3/download"]},{"noticeId":"d7c83d59852b4e148d8d0245717ee19d","title":"DH10--DIGITAL
+        WAYFINDING","solicitationNumber":"36C26226Q0506","fullParentPathName":"VETERANS
+        AFFAIRS, DEPARTMENT OF.VETERANS AFFAIRS, DEPARTMENT OF.262-NETWORK CONTRACT
+        OFFICE 22 (36C262)","fullParentPathCode":"036.3600.36C262","postedDate":"2026-04-20","type":"Solicitation","baseType":"Solicitation","archiveType":"autocustom","archiveDate":"2026-05-24","typeOfSetAsideDescription":null,"typeOfSetAside":null,"responseDeadLine":"2026-04-24T13:00:00-06:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DH10","active":"Yes","award":{"awardee":{}},"pointOfContact":[{"fax":null,"type":"primary","email":"felicia.simpson@va.gov","phone":null,"title":"Contract
+        Specialist","fullName":"Felicia L Simpson"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=d7c83d59852b4e148d8d0245717ee19d","organizationType":"OFFICE","officeAddress":{"zipcode":"85297","city":"Gilbert","countryCode":"USA","state":"AZ"},"placeOfPerformance":{"city":{},"state":{},"country":{}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/d7c83d59852b4e148d8d0245717ee19d/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=d7c83d59852b4e148d8d0245717ee19d&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/2d19ec79d4d94911a0cabd7c45d9dcc3/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/31bf4db42f444b17a93bb7bee147d972/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/40c6ef2598b040008a9636d8556bc151/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/4a871b6ae97e4038b2ccda7332222b21/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/56e0e693646943758281073962306e76/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/936837f5494d45feb32da2551a46d029/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d2d48586e5c34f69bb794ec448c29f32/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d9268b32693544269e1e99d9fa0cf718/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/f4d823bc3e864ee69088b2d21442c684/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/fecaafdb9575460fb65d573480506e6b/download"]},{"noticeId":"380cd89564f8447e9db3cda958f6b968","title":"DHS/CBP
+        Commercial Solutions Opening - General Solicitation Release - Illegal Transshipment
+        Pilot - CSOP-BP-GS-26-0001","solicitationNumber":"CSOP-BP-GS-26-0001","fullParentPathName":"HOMELAND
+        SECURITY, DEPARTMENT OF.US CUSTOMS AND BORDER PROTECTION.MISSION SUPPORT CONTRACTING
+        DIVISION","fullParentPathCode":"070.7014.70B06C","postedDate":"2026-04-15","type":"Solicitation","baseType":"Solicitation","archiveType":"autocustom","archiveDate":"2026-09-30","typeOfSetAsideDescription":"No
+        Set aside used","typeOfSetAside":"NONE","responseDeadLine":"2026-04-24T15:00:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DA01","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"peter.a.giambone@cbp.dhs.gov","phone":"","title":null,"fullName":"Peter
+        Giambone"},{"fax":"","type":"secondary","email":"joshua.bedregal@cbp.dhs.gov","phone":"","title":null,"fullName":"Joshua
+        Bedregal"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=380cd89564f8447e9db3cda958f6b968","organizationType":"OFFICE","officeAddress":{"zipcode":"20229","city":"WASHINGTON","countryCode":"USA","state":"DC"},"placeOfPerformance":{"city":{"code":"50000","name":"Washington"},"state":{"code":"DC","name":"District
+        of Columbia"},"zip":"20001","country":{"code":"USA","name":"UNITED STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/380cd89564f8447e9db3cda958f6b968/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=380cd89564f8447e9db3cda958f6b968&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/8d5d22bb23c54bfd94fcf531adac731d/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/b163f0e99a2140c395bf3f58162bbd43/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/f837a1da82b94f3cb4ba1a41391ddaae/download"]}],"links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?limit=5&ncode=541512&postedFrom=04%2F01%2F2026&postedTo=04%2F30%2F2026&ptype=p%2Co"}]}'
+  recorded_at: Sun, 24 May 2026 02:12:17 GMT
+recorded_with: VCR 6.4.0
