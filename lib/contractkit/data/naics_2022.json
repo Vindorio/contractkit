@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "version": "NAICS 2022",
+    "scope": "v0.1 procurement-focused subset (~40 codes covering the highest-volume federal-contract NAICS). Full ~1100-code coverage is v0.2 data-only work. Generate from the Census Bureau 2022 NAICS index CSV: https://www.census.gov/naics/?68967",
+    "source": "Hand-curated from Census Bureau NAICS 2022 manual",
+    "regenerate_with": "script/regenerate_naics.rb (not yet shipped)"
+  },
+  "entries": [
+    { "code": "236220", "title": "Commercial and Institutional Building Construction", "sector_code": "23", "subsector_code": "236" },
+    { "code": "237110", "title": "Water and Sewer Line and Related Structures Construction", "sector_code": "23", "subsector_code": "237" },
+    { "code": "237310", "title": "Highway, Street, and Bridge Construction", "sector_code": "23", "subsector_code": "237" },
+    { "code": "238210", "title": "Electrical Contractors and Other Wiring Installation Contractors", "sector_code": "23", "subsector_code": "238" },
+
+    { "code": "332999", "title": "All Other Miscellaneous Fabricated Metal Product Manufacturing", "sector_code": "33", "subsector_code": "332" },
+    { "code": "334111", "title": "Electronic Computer Manufacturing", "sector_code": "33", "subsector_code": "334" },
+    { "code": "334413", "title": "Semiconductor and Related Device Manufacturing", "sector_code": "33", "subsector_code": "334" },
+    { "code": "336411", "title": "Aircraft Manufacturing", "sector_code": "33", "subsector_code": "336" },
+
+    { "code": "423450", "title": "Medical, Dental, and Hospital Equipment and Supplies Merchant Wholesalers", "sector_code": "42", "subsector_code": "423" },
+
+    { "code": "488510", "title": "Freight Transportation Arrangement", "sector_code": "48", "subsector_code": "488" },
+
+    { "code": "511210", "title": "Software Publishers", "sector_code": "51", "subsector_code": "511" },
+    { "code": "517110", "title": "Wired Telecommunications Carriers", "sector_code": "51", "subsector_code": "517" },
+    { "code": "517311", "title": "Wired Telecommunications Carriers", "sector_code": "51", "subsector_code": "517" },
+    { "code": "518210", "title": "Data Processing, Hosting, and Related Services", "sector_code": "51", "subsector_code": "518" },
+    { "code": "519130", "title": "Internet Publishing and Broadcasting and Web Search Portals", "sector_code": "51", "subsector_code": "519" },
+
+    { "code": "541310", "title": "Architectural Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541330", "title": "Engineering Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541370", "title": "Surveying and Mapping (except Geophysical) Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541511", "title": "Custom Computer Programming Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541512", "title": "Computer Systems Design Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541513", "title": "Computer Facilities Management Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541519", "title": "Other Computer Related Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541611", "title": "Administrative Management and General Management Consulting Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541612", "title": "Human Resources Consulting Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541618", "title": "Other Management Consulting Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541690", "title": "Other Scientific and Technical Consulting Services", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541715", "title": "Research and Development in the Physical, Engineering, and Life Sciences (except Nanotechnology and Biotechnology)", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541720", "title": "Research and Development in the Social Sciences and Humanities", "sector_code": "54", "subsector_code": "541" },
+    { "code": "541990", "title": "All Other Professional, Scientific, and Technical Services", "sector_code": "54", "subsector_code": "541" },
+
+    { "code": "561210", "title": "Facilities Support Services", "sector_code": "56", "subsector_code": "561" },
+    { "code": "561320", "title": "Temporary Help Services", "sector_code": "56", "subsector_code": "561" },
+    { "code": "561621", "title": "Security Systems Services (except Locksmiths)", "sector_code": "56", "subsector_code": "561" },
+    { "code": "561720", "title": "Janitorial Services", "sector_code": "56", "subsector_code": "561" },
+    { "code": "562910", "title": "Remediation Services", "sector_code": "56", "subsector_code": "562" },
+
+    { "code": "611430", "title": "Professional and Management Development Training", "sector_code": "61", "subsector_code": "611" },
+    { "code": "611710", "title": "Educational Support Services", "sector_code": "61", "subsector_code": "611" },
+
+    { "code": "621111", "title": "Offices of Physicians (except Mental Health Specialists)", "sector_code": "62", "subsector_code": "621" },
+    { "code": "622110", "title": "General Medical and Surgical Hospitals", "sector_code": "62", "subsector_code": "622" }
+  ],
+  "sectors": {
+    "23": "Construction",
+    "31": "Manufacturing",
+    "32": "Manufacturing",
+    "33": "Manufacturing",
+    "42": "Wholesale Trade",
+    "48": "Transportation and Warehousing",
+    "49": "Transportation and Warehousing",
+    "51": "Information",
+    "54": "Professional, Scientific, and Technical Services",
+    "56": "Administrative and Support and Waste Management and Remediation Services",
+    "61": "Educational Services",
+    "62": "Health Care and Social Assistance"
+  },
+  "subsectors": {
+    "236": "Construction of Buildings",
+    "237": "Heavy and Civil Engineering Construction",
+    "238": "Specialty Trade Contractors",
+    "332": "Fabricated Metal Product Manufacturing",
+    "334": "Computer and Electronic Product Manufacturing",
+    "336": "Transportation Equipment Manufacturing",
+    "423": "Merchant Wholesalers, Durable Goods",
+    "488": "Support Activities for Transportation",
+    "511": "Publishing Industries (except Internet)",
+    "517": "Telecommunications",
+    "518": "Data Processing, Hosting, and Related Services",
+    "519": "Other Information Services",
+    "541": "Professional, Scientific, and Technical Services",
+    "561": "Administrative and Support Services",
+    "562": "Waste Management and Remediation Services",
+    "611": "Educational Services",
+    "621": "Ambulatory Health Care Services",
+    "622": "Hospitals"
+  }
+}
