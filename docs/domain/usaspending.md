@@ -63,6 +63,12 @@ Page-based (not offset):
 - `page` is 1-indexed.
 - Response includes `page_metadata` with `hasNext`, `total`, `page`, `last_page`.
 
+**Gem batch pagination (per [#32](../../ISSUES.md)):** `Usaspending::Client#search`
+yields one batch per API page via a block, auto-paginating until
+`page_metadata.hasNext` is false or the optional `limit:` cap is reached.
+Batch size matches the upstream page size (default 100). Memory cost is
+one page at a time. Pass no block to get a lazy Enumerator.
+
 **Quirks:**
 - Past `page=1000` (~100k records) the endpoint can time out before responding. Window large queries by fiscal year or agency to stay shallower.
 - Sort key strings are case-sensitive **and space-sensitive** — `"Action Date"` works, `"action_date"` doesn't.

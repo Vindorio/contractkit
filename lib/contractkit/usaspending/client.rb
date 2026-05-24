@@ -7,27 +7,25 @@ module Contractkit
   module Usaspending
     # Thin client over the USASpending.gov API. Returns raw parsed JSON
     # hashes — typed models (Contractkit::Award, Contractkit::Recipient)
-    # arrive in M2.
+    # layer on top in M2.
     #
-    # USASpending is keyless. The only persistent concern is the rate at
-    # which we hit it; the rate limiter middleware (set per-host in
-    # Contractkit::Http::RateLimiter::DEFAULTS) handles that automatically.
+    # USASpending is keyless. The only persistent concern is rate; the
+    # rate limiter middleware handles that automatically per host.
     #
-    # See docs/domain/usaspending.md for endpoint behavior, money-field
-    # semantics, and known quirks (POST-with-filters shape, page-based
-    # pagination, timeouts on wide queries).
+    # See docs/domain/usaspending.md for endpoint behavior and quirks.
     class Client
       BASE_URL = "https://api.usaspending.gov/api/v2"
       SEARCH_PATH = "/search/spending_by_award/"
-      RECIPIENT_PATH = "/recipient/duns" # canonical despite the legacy "duns" path
+      RECIPIENT_PATH = "/recipient/duns" # legacy "duns" path; the API moved to UEI but kept the URL
 
-      # Default fields requested on spending_by_award. The endpoint REQUIRES
-      # a fields array; omitting it returns 422. This set is a workable
-      # baseline; callers override per request.
-      #
-      # Verbatim from Vindor's FetchAwardsJob::FIELDS list per
-      # extraction-plan #2 (the field names are the human-readable strings
-      # USASpending's response uses as keys — yes, they include spaces).
+      # USASpending caps spending_by_award at 100 records per page. We
+      # default to that — batch yields are one-page-per-batch and matching
+      # upstream's natural page size keeps round-trip overhead minimal. See #32.
+      DEFAULT_PAGE_SIZE = 100
+
+      # Required fields list. USASpending's spending_by_award endpoint
+      # returns 422 if `fields` is omitted. Verbatim from Vindor's
+      # FetchAwardsJob::FIELDS per extraction-plan #2.
       DEFAULT_FIELDS = [
         "Award ID",
         "Recipient Name",
@@ -51,10 +49,9 @@ module Contractkit
         "recipient_id"
       ].freeze
 
-      # USASpending's award-type taxonomy. A/B/C/D are contracts (definitive,
-      # purchase order, delivery order, BPA call). Other letters are
-      # grants/loans/etc.; the gem is contracts-focused so we default to
-      # %w[A B C D].
+      # A/B/C/D are contract award types (definitive, purchase order,
+      # delivery order, BPA call). Other letters are grants/loans/etc.;
+      # the gem is contracts-focused so we default to these.
       CONTRACT_AWARD_TYPE_CODES = %w[A B C D].freeze
 
       def initialize(config: Contractkit.configuration)
@@ -63,15 +60,7 @@ module Contractkit
       end
 
       # POST /api/v2/search/spending_by_award/
-      #
-      # @param filters [Hash] passed through verbatim. award_type_codes
-      #   defaults to contracts (A/B/C/D) if the caller doesn't supply it.
-      # @param fields [Array<String>] response fields; defaults to
-      #   DEFAULT_FIELDS.
-      # @param page [Integer] 1-indexed.
-      # @param limit [Integer] page size; USASpending caps at 100.
-      # @return [Hash] parsed JSON with keys `results` and `page_metadata`.
-      def raw_search(filters: {}, fields: DEFAULT_FIELDS, page: 1, limit: 100)
+      def raw_search(filters: {}, fields: DEFAULT_FIELDS, page: 1, limit: DEFAULT_PAGE_SIZE)
         body = {
           filters: with_default_award_types(filters),
           fields: fields,
@@ -88,25 +77,56 @@ module Contractkit
       end
 
       # GET /api/v2/recipient/duns/{uei}/
-      #
-      # The "duns" path segment is legacy — the API moved to UEI in 2022 but
-      # kept the URL stable.
       def raw_recipient(uei)
         path = "#{RECIPIENT_PATH}/#{uei}/"
         response = @connection.get(BASE_URL + path)
         handle_response(response, path, :get, { uei: uei })
       end
 
-      # Returns a lazy Enumerable over every award matching the filters,
-      # transparently paginating until page_metadata.hasNext is false.
-      def search(filters: {}, fields: DEFAULT_FIELDS, limit: 100)
-        Pagination::Page.new(
-          client: self,
-          filters: filters,
-          fields: fields,
-          limit: limit
-        )
+      # Auto-paginated batch interface over spending_by_award.
+      #
+      # Yields one batch per API page (each batch is the raw `results`
+      # array). Auto-fetches subsequent pages until page_metadata.hasNext
+      # is false or the optional `limit:` cap is reached. Memory cost is
+      # one page at a time.
+      #
+      # @example block form
+      #   client.search(filters: {...}) do |batch|
+      #     Award.upsert_batch(batch)
+      #   end
+      #
+      # @example Enumerator form
+      #   client.search(filters: {...}).each { |batch| ... }
+      #
+      # @param limit [Integer, nil] cap on total records across all pages.
+      # @param per_page [Integer] page size; default is USASpending's max (100).
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def search(filters: {}, fields: DEFAULT_FIELDS, limit: nil, per_page: DEFAULT_PAGE_SIZE,
+                 &block)
+        unless block
+          return enum_for(:search, filters: filters, fields: fields,
+                                   limit: limit, per_page: per_page)
+        end
+
+        page = 1
+        yielded = 0
+        loop do
+          response = raw_search(filters: filters, fields: fields, page: page, limit: per_page)
+          batch = response["results"] || []
+          break if batch.empty?
+
+          batch = batch.first(limit - yielded) if limit && yielded + batch.size > limit
+
+          yield batch
+          yielded += batch.size
+
+          break if limit && yielded >= limit
+          break unless response.dig("page_metadata", "hasNext")
+
+          page += 1
+        end
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       private
 

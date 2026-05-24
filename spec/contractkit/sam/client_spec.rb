@@ -61,24 +61,50 @@ RSpec.describe Contractkit::Sam::Client do
     end
   end
 
-  describe "#search (lazy pagination)", :vcr do
-    it "transparently walks multiple pages across a real query" do
-      # Small per_page to force multi-page behavior; cap with .take so the
-      # cassette captures only enough pages to prove the loop works.
-      # Widened to a 90-day window across all set-asides to ensure enough
-      # results to cross a page boundary even on a quiet NAICS.
-      results = described_class.new
-                               .search(
-                                 ncode: "541512",
-                                 per_page: 3,
-                                 postedFrom: Date.new(2026, 2, 1),
-                                 postedTo: Date.new(2026, 4, 30)
-                               )
-                               .take(8)
+  describe "#search batch pagination", :vcr do
+    it "yields one batch per API page across a multi-page real query" do
+      batches = []
+      described_class.new.search(
+        ncode: "541512",
+        per_page: 3,
+        postedFrom: Date.new(2026, 2, 1),
+        postedTo: Date.new(2026, 4, 30)
+      ) do |batch|
+        batches << batch
+        break if batches.size >= 3 # cap so the cassette stays small
+      end
 
-      expect(results.size).to be > 3 # must have crossed at least one page boundary
-      expect(results).to all(be_a(Hash))
-      expect(results.first).to include("noticeId")
+      expect(batches.size).to be >= 2 # crossed at least one page boundary
+      expect(batches).to all(be_an(Array))
+      expect(batches.first).to all(be_a(Hash))
+      expect(batches.first.first).to include("noticeId")
+    end
+
+    it "returns an Enumerator when no block is given" do
+      enum = described_class.new.search(
+        ncode: "541512",
+        per_page: 3,
+        postedFrom: Date.new(2026, 2, 1),
+        postedTo: Date.new(2026, 4, 30)
+      )
+
+      expect(enum).to be_an(Enumerator)
+      first_batch = enum.first
+      expect(first_batch).to be_an(Array)
+      expect(first_batch.size).to be <= 3
+    end
+
+    it "honors the limit parameter to cap total records across batches" do
+      total = 0
+      described_class.new.search(
+        ncode: "541512",
+        per_page: 3,
+        limit: 4, # forces one full batch (3) + one truncated (1)
+        postedFrom: Date.new(2026, 2, 1),
+        postedTo: Date.new(2026, 4, 30)
+      ) { |batch| total += batch.size }
+
+      expect(total).to eq(4)
     end
   end
 
