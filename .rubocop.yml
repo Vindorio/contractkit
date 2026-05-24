@@ -93,3 +93,10 @@ RSpec/MultipleExpectations:
 
 RSpec/ExampleLength:
   Max: 15
+
+RSpec/MultipleDescribes:
+  # We group related-class specs in one file deliberately (e.g.
+  # Configuration + Client + module-level Contractkit.configure live
+  # together). The cop's nested-describe alternative buries the second
+  # class under indentation for no real benefit.
+  Enabled: false
