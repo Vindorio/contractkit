@@ -91,5 +91,63 @@ module Contractkit
     def hash
       award_id.hash
     end
+
+    # ----------------------------------------------------------------
+    # Resource-module surface — convenience over the global config.
+    # ----------------------------------------------------------------
+
+    class << self
+      # Lazy AwardSearch over USASpending's spending_by_award.
+      def search(client: nil, filters: {}, fields: nil, limit: nil, per_page: nil)
+        AwardSearch.new(
+          client: client || default_client,
+          filters: filters, fields: fields, limit: limit, per_page: per_page
+        )
+      end
+
+      # Yields each Award whose action_date falls on or after `time`.
+      # USASpending has no "last modified" filter; the `time_period`
+      # filter on action_date is the closest equivalent.
+      def updated_since(time, client: nil, filters: {}, **, &block)
+        merged = filters.merge(
+          "time_period" => [{
+            "start_date" => to_date(time).iso8601,
+            "end_date" => Date.today.iso8601
+          }]
+        )
+        result = search(client: client, filters: merged, **)
+        return result.each(&block) if block
+
+        result
+      end
+
+      # Fetches a single Award by its generated_unique_award_id.
+      #
+      # **v0.2:** USASpending's `/api/v2/awards/{id}/` endpoint returns
+      # a different JSON shape than spending_by_award (nested toptier/
+      # subtier agency objects, recipient sub-document, no spaces in
+      # keys). A separate parser path is required. Deferred to v0.2
+      # because it isn't a blocker for the v0.1 dogfood — Vindor uses
+      # filtered search and locates by award_id in the results.
+      def find(_award_id, client: nil)
+        raise NotImplementedError,
+              "Award.find is deferred to v0.2. USASpending's /api/v2/awards/{id}/ " \
+              "endpoint returns a different JSON shape than spending_by_award; " \
+              "a separate parser path is needed. For now, use Award.search with a " \
+              "piid or recipient_uei filter and locate by award_id in the results."
+      end
+
+      private
+
+      def default_client
+        Contractkit::Usaspending::Client.new
+      end
+
+      def to_date(value)
+        return value if value.is_a?(Date) && !value.is_a?(DateTime)
+
+        value.respond_to?(:to_date) ? value.to_date : Date.parse(value.to_s)
+      end
+    end
   end
 end
