@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: RSpec (Ruby ${{ matrix.ruby }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["3.2", "3.3", "3.4"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          # bundler-cache caches ~/.bundle and vendor/bundle keyed on
+          # Gemfile.lock — equivalent to the manual actions/cache step.
+          bundler-cache: true
+
+      - name: Run RSpec (offline)
+        # CONTRACTKIT_LIVE_TESTS=0 reserved as a knob for later when we
+        # introduce an optional :live integration suite (#26 territory).
+        env:
+          CONTRACTKIT_LIVE_TESTS: "0"
+        run: bundle exec rake spec
+
+  lint:
+    name: RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # Pin to the highest supported Ruby for the linter job —
+          # one row is enough, no matrix needed.
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rake lint
+
+  audit:
+    name: bundler-audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Install bundler-audit
+        # Kept out of Gemfile to avoid an extra runtime dep on a security
+        # scanner — only CI needs it. Local devs run `gem install bundler-audit`.
+        run: gem install bundler-audit
+
+      - name: Run audit
+        run: bundle audit check --update
