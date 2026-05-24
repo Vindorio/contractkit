@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Installs dev dependencies for a fresh checkout of contractkit.
+
+set -euo pipefail
+IFS=$'\n\t'
+
+bundle install
