@@ -59,16 +59,31 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Contractkit::CrossReference::DEFAULT_ENDING_WINDOW_MONTHS` is now
   `12` (was 24, reserved). The comment is updated to point at
   `Contractkit::Recompete` for the time-forward helper that consumes it.
+- **Subaward bulk search removed upstream** — USASpending deleted
+  `/api/v2/search/spending_by_subaward/` (verified 404, 2026-05-24).
+  `Contractkit::Usaspending::Client#subawards` now takes `award_id:`
+  and posts to `/api/v2/subawards/`. `Contractkit::Subaward.search`
+  raises `NotImplementedError` directing callers to `.for_award`.
+- **Parser field names verified live** (2026-05-24): `parse_idv` now
+  reads the IDV type code from top-level `hash["type"]` (no
+  `idv_type` key exists upstream); `parse_detail` documents that
+  pricing fields land at top-level `base_and_all_options` /
+  `base_exercised_options` / `total_obligation` and that there is no
+  separate `total_contract_value` key (falls back to
+  `base_and_all_options`). FIXME(M4) markers cleared except for the
+  SAM Entities client, which remains unverified (SAM key was
+  rate-limited at sign-off).
 
 ### Deferred — follow-up issues to file from PR
 
 - Dedicated `Contractkit::Sam::Exclusions` client for historical /
   multi-record exclusion lookup. M4 ships exclusion *status* via the
   Entities response; the historical surface is filed separately.
-- Live VCR cassettes for SAM Entities and the USASpending detail /
-  transactions / subawards endpoints. M4 ships with synthetic
-  fixture-driven specs — recording against the live APIs requires
-  credentials we don't have in this branch.
+- Live VCR cassettes for the SAM Entities endpoint. The USASpending
+  detail / IDV / transactions / subawards endpoints are now covered
+  by parser-shape specs against committed live response fixtures in
+  `spec/fixtures/live_responses/`; SAM remains synthetic-only because
+  the API key was throttled at sign-off.
 
 ## [0.1.0] - 2026-05-24
 

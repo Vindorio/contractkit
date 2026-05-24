@@ -1,0 +1,36 @@
+{
+  "spending_level": "awards",
+  "limit": 3,
+  "results": [
+    {
+      "internal_id": 351737834,
+      "Award ID": "V797P7347A",
+      "Recipient Name": "ROCHE DIAGNOSTICS CORPORATION",
+      "generated_internal_id": "CONT_IDV_V797P7347A_3600",
+      "Last Date To Order": null
+    },
+    {
+      "internal_id": 351737810,
+      "Award ID": "V797P7323A",
+      "Recipient Name": "ABBOTT MOLECULAR INC.",
+      "generated_internal_id": "CONT_IDV_V797P7323A_3600",
+      "Last Date To Order": null
+    },
+    {
+      "internal_id": 351737809,
+      "Award ID": "V797P7322A",
+      "Recipient Name": "ABBOTT LABORATORIES INC.",
+      "generated_internal_id": "CONT_IDV_V797P7322A_3600",
+      "Last Date To Order": null
+    }
+  ],
+  "page_metadata": {
+    "page": 1,
+    "hasNext": true,
+    "last_record_unique_id": 351737809,
+    "last_record_sort_value": "V797P7322A"
+  },
+  "messages": [
+    "For searches, time period start and end dates are currently limited to an earliest date of 2007-10-01.  For data going back to 2000-10-01, use either the Custom Award Download feature on the website or one of our download or bulk_download API endpoints as listed on https://api.usaspending.gov/docs/endpoints. "
+  ]
+}
