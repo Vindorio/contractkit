@@ -78,3 +78,18 @@ Gemspec/DevelopmentDependencies:
   # Dev deps live in the Gemfile, not the gemspec — keeps the gemspec
   # focused on what consumers install.
   EnforcedStyle: Gemfile
+
+# --- RSpec ---------------------------------------------------------------
+
+RSpec/DescribeClass:
+  # Meta-specs describe behaviors ("no-real-HTTP guard"), not classes.
+  # Defaulting on means every test of a configuration/policy gets flagged.
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  # 1 is too strict for realistic test scenarios where multiple assertions
+  # describe the same single behavior.
+  Max: 5
+
+RSpec/ExampleLength:
+  Max: 15
