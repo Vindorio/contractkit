@@ -6,4 +6,7 @@ gemspec
 
 group :development do
   gem "rake", "~> 13.0"
+  gem "rubocop", "~> 1.0", require: false
+  gem "rubocop-performance", "~> 1.0", require: false
+  gem "rubocop-rspec", "~> 3.0", require: false
 end
