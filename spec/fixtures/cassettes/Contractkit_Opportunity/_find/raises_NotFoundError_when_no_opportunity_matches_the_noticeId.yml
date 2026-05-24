@@ -1,0 +1,32 @@
+---
+# Hand-crafted "no results" cassette. SAM returns an empty
+# opportunitiesData array for a nonexistent noticeId rather than 404.
+http_interactions:
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&noticeid=definitely-not-a-real-notice-id-xyz&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 04:00:00 GMT
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"totalRecords":0,"limit":0,"offset":0,"opportunitiesData":[],"links":[]}'
+    http_version: '1.1'
+  recorded_at: Sun, 24 May 2026 04:00:00 GMT
+recorded_with: VCR 6.4.0

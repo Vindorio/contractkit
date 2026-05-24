@@ -18,6 +18,7 @@ require_relative "contractkit/set_aside"
 require_relative "contractkit/psc"
 require_relative "contractkit/place_of_performance"
 require_relative "contractkit/opportunity"
+require_relative "contractkit/opportunity_search"
 require_relative "contractkit/sam/response_parser"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
