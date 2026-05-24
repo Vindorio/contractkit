@@ -22,19 +22,23 @@ module Contractkit
       freeze
     end
 
+    # @return [Hash] flat hash of all fields (for serialization).
     def to_h
       { code: code, title: title, category_code: category_code, category: category }
     end
 
+    # Value-equality by 4-character code.
     def ==(other)
       other.is_a?(Psc) && code == other.code
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       code.hash
     end
 
+    # Path to the shipped PSC JSON (see {Contractkit::Psc.all}).
     DATA_PATH = File.expand_path("data/psc.json", __dir__)
 
     class << self
@@ -51,10 +55,13 @@ module Contractkit
         categories[code.to_s[0]&.upcase]
       end
 
+      # Frozen array of every shipped Psc entry.
       def all
         @all ||= index.values.freeze
       end
 
+      # Frozen prefix-letter → category-title map (the full 24-letter PSC
+      # category set, not just the prefix letters covered by shipped entries).
       def categories
         @categories ||= data["categories"].freeze
       end

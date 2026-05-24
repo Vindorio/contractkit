@@ -17,15 +17,20 @@ module Contractkit
       freeze
     end
 
+    # @return [Hash] flat hash of all fields (for serialization).
     def to_h
       { name: name, uei: uei, duns: duns, recipient_id: recipient_id }
     end
 
+    # Value-equality by (uei, name). Two recipients with the same UEI but
+    # different captured names compare unequal — names drift across awards
+    # for the same entity, so the pair is safer than UEI alone.
     def ==(other)
       other.is_a?(Recipient) && uei == other.uei && name == other.name
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       [uei, name].hash
     end

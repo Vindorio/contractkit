@@ -20,12 +20,19 @@ module Contractkit
       @params = params
     end
 
+    # Yields one Opportunity at a time across all matching pages.
+    # @yieldparam opportunity [Contractkit::Opportunity]
+    # @return [Enumerator] when no block given
     def each(&block)
       return enum_for(:each) unless block
 
       each_batch { |batch| batch.each(&block) }
     end
 
+    # Yields one Array<Opportunity> per upstream SAM page. Batch size
+    # matches the upstream's natural per-page cap (1000 by default).
+    # @yieldparam batch [Array<Contractkit::Opportunity>]
+    # @return [Enumerator] when no block given
     def each_batch
       return enum_for(:each_batch) unless block_given?
 

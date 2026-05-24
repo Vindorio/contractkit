@@ -15,15 +15,18 @@ module Contractkit
       freeze
     end
 
+    # @return [Hash] flat hash of start/end dates.
     def to_h
       { start_date: start_date, end_date: end_date }
     end
 
+    # Value-equality by both start_date and end_date.
     def ==(other)
       other.is_a?(Period) && to_h == other.to_h
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       to_h.hash
     end

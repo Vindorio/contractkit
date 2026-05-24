@@ -22,6 +22,7 @@ module Contractkit
       freeze
     end
 
+    # @return [Hash] flat hash form of all four fields (for serialization).
     def to_h
       { code: code, name: name, cgac: cgac, aliases: aliases }
     end
@@ -37,10 +38,12 @@ module Contractkit
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       [code, name].hash
     end
 
+    # Path to the shipped agency-aliases JSON (see {Contractkit::Agency.all}).
     DATA_PATH = File.expand_path("data/agency_aliases.json", __dir__)
 
     class << self

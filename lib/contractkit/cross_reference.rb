@@ -5,9 +5,13 @@ module Contractkit
   # no primary key — see docs/domain/cross-referencing.md for the full
   # rationale of why agency+NAICS is the workhorse join.
   module CrossReference
+    # Default historical-award lookback for {.awards_for}, in years.
     DEFAULT_LOOKBACK_YEARS = 5
+    # Reserved for v0.2 recompete-window refinement.
     DEFAULT_ENDING_WINDOW_MONTHS = 24
+    # Default match keys: agency + NAICS (the workhorse join).
     DEFAULT_MATCH = %i[agency naics].freeze
+    # Default cap on related awards returned by {.awards_for}.
     DEFAULT_LIMIT = 50
 
     # Returns awards likely related to the given opportunity. Default

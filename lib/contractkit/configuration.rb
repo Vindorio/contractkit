@@ -14,6 +14,9 @@ module Contractkit
   # as effectively read-only after their setup phase finishes — flipping
   # it under traffic works but is rarely what you want.
   class Configuration
+    # Default values for every {Configuration} option. Hash/Array
+    # values are duped per-instance so consumer mutation doesn't leak
+    # back into the shared default.
     DEFAULTS = {
       sam_api_key: nil,
       user_agent: "contractkit/#{Contractkit::VERSION} (+https://github.com/gudetimes1234/contractkit)",
@@ -28,6 +31,8 @@ module Contractkit
       agency_aliases: {}
     }.freeze
 
+    # Frozen list of recognized option names. Anything not in OPTIONS
+    # raises {Contractkit::ConfigurationError} at construction time.
     OPTIONS = DEFAULTS.keys.freeze
 
     attr_writer(*OPTIONS)
