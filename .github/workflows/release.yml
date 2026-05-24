@@ -1,0 +1,61 @@
+name: Release
+
+# Triggers on any v*.*.* tag push. Runs the full CI suite first; on a
+# green build, publishes the gem to rubygems.org via trusted publishing
+# (OIDC — no long-lived RUBYGEMS_API_KEY in GitHub Secrets).
+#
+# REQUIRED ONE-TIME SETUP (on rubygems.org):
+#   1. Push a 0.x.x version manually first so the gem name is reserved.
+#   2. On https://rubygems.org/gems/contractkit/trusted_publishers,
+#      add a GitHub Actions trusted publisher for this repo + this
+#      workflow filename + the `release` environment.
+# See CONTRIBUTING.md §Release process.
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Build and publish to RubyGems
+    runs-on: ubuntu-latest
+
+    # OIDC token issuance requires id-token: write
+    permissions:
+      id-token: write
+      contents: write # to create a matching GitHub release on success
+
+    environment:
+      name: release
+      url: https://rubygems.org/gems/contractkit
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so CHANGELOG-driven release notes work
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      # Full CI must pass before we publish. Same suite the test workflow
+      # runs; duplicated here intentionally so a release branch with a
+      # green CI but a regression introduced at tag-time cannot ship.
+      - name: Run full CI suite
+        env:
+          CONTRACTKIT_LIVE_TESTS: "0"
+        run: bundle exec rake
+
+      - name: Verify gemspec is buildable
+        run: gem build contractkit.gemspec
+
+      - name: Publish to RubyGems (trusted publishing via OIDC)
+        uses: rubygems/release-gem@v1
+        # The action handles: gem build, OIDC token exchange, gem push,
+        # and (when invoked on a tag matching v*.*.*) a matching GitHub
+        # release. No RUBYGEMS_API_KEY secret needed.
