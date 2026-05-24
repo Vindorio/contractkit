@@ -89,7 +89,7 @@ RSpec/DescribeClass:
 RSpec/MultipleExpectations:
   # 1 is too strict for realistic test scenarios where multiple assertions
   # describe the same single behavior.
-  Max: 5
+  Max: 6
 
 RSpec/ExampleLength:
   Max: 15
