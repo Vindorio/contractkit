@@ -33,6 +33,17 @@ module Contractkit
         symbol
       end
 
+      # Same as normalize, but returns :unknown rather than raising when
+      # the input doesn't match any known code/alias. Parsers use this so
+      # one unrecognized set-aside doesn't blow up an entire opportunity
+      # record; raising remains the right call when consumers reach for
+      # normalize directly.
+      def safe_normalize(input)
+        normalize(input)
+      rescue UnknownCode
+        :unknown
+      end
+
       # Canonical human-readable label for a symbol. Returns nil for
       # unknown symbols (rather than raising — callers ask "do we know
       # this?" via #known?).
