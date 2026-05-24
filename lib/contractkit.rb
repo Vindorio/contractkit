@@ -14,6 +14,7 @@ require_relative "contractkit/sam/client"
 require_relative "contractkit/usaspending/client"
 require_relative "contractkit/agency"
 require_relative "contractkit/naics"
+require_relative "contractkit/set_aside"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
 module Contractkit
