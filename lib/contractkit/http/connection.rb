@@ -3,6 +3,7 @@
 require "faraday"
 require "faraday/retry"
 require_relative "redactor"
+require_relative "rate_limiter"
 
 module Contractkit
   module Http
@@ -46,6 +47,10 @@ module Contractkit
         Faraday.new do |conn|
           conn.options.timeout      = config.timeout
           conn.options.open_timeout = 5
+
+          # Rate limiter must run before retry — if we're already at the
+          # upstream's per-minute cap, retry waiting won't help.
+          conn.request :contractkit_rate_limiter
 
           conn.request :retry,
                        max: config.retries,
