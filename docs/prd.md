@@ -81,8 +81,8 @@ Mapped to the milestone structure ([[ISSUES]] has the 30 filed issues).
 
 ### M0 — Scaffolding
 - Standard gem packaging: `gemspec`, `Gemfile`, `Rakefile`, MIT license
-- GitHub Actions CI matrixed across Ruby 3.1-3.4
-- RSpec + WebMock with hermetic no-real-HTTP testing
+- GitHub Actions CI matrixed across Ruby 3.2-3.4 (3.1 dropped — EOL March 2025; bundler 4 requires 3.2+)
+- RSpec + VCR + WebMock with hermetic no-real-HTTP testing (VCR cassettes for happy paths; WebMock for error/edge cases)
 - YARD with a coverage gate
 - README, CHANGELOG, CONTRIBUTING
 
@@ -118,11 +118,14 @@ Mapped to the milestone structure ([[ISSUES]] has the 30 filed issues).
   sector/subsector hierarchy), `Psc` (Product Service Codes), `SetAside`
   (SAM-codes normalized to Ruby symbols with human labels).
 - **Agency normalization.** Canonical `Agency` value object with
-  `code` / `name` / `cgac` / `aliases`. Resolves at ingestion — by the
+  `code` / `name` / `cgac` / `aliases`, resolved at ingestion — by the
   time the consumer sees an `Opportunity`, `#agency` is already a
   canonical instance, enabling fast indexed `WHERE agency_code = 'VA'`
-  queries instead of fuzzy string matching. v0.1 ships ~35-40
-  cabinet-level entries; consumers extend via
+  queries instead of fuzzy string matching. v0.1 ships ~25 cabinet-level
+  departments (the 15 statutory cabinet departments plus the major
+  independent agencies — GSA, NASA, EPA, SBA, USAID, NSF, SSA, OPM,
+  NRC, USPS). Sub-tier coverage (DoD service branches, DHS components,
+  contracting offices) is deferred to v0.2. Consumers extend via
   `config.agency_aliases.merge!(...)`. Unknown agencies fall back to a
   raw-string `Agency` rather than raising. See [[domain/agency-normalization]].
 - **Cross-referencing.** `Opportunity#related_awards` joins SAM
@@ -324,9 +327,6 @@ warrants product-owner attention rather than implementer judgment:
   silently change a field shape and the gem absorbs the change
   internally, is that a PATCH or a MAJOR? Lean PATCH if the gem's
   surface is unchanged. Lock in writing.
-- **Set-aside encoding source of truth.** SAM's raw codes (`SBA`, `8A`,
-  `WOSB`) as canonical, mapped to Ruby symbols via the gem's table —
-  vs. some other normalization. Current call: SAM codes. Confirm.
 - **Caching policy default.** Cache off by default in v0.1
   (currently the plan). Should it flip on for repeat lookups
   (NAICS/PSC/agency) in v0.2? Probably yes, but worth a thread.

@@ -204,35 +204,29 @@ Agency is the messiest cross-source field. See [[agency-normalization]] for the 
 ```ruby
 module Contractkit
   class Agency
-    attr_reader :code,                    # String — FPDS top-tier (e.g. "097")
-                :code_path,               # String | nil — full hierarchy of codes
-                :name,                    # String — canonical name from lookup
-                :raw_name,                # String — name as it appeared upstream
-                :tier,                    # :department | :subagency | :office
-                :department_name,         # String — top-level rollup
-                :subagency_name,          # String | nil
-                :office_name,             # String | nil
-                :raw
+    attr_reader :code,      # String | nil — short identifier (e.g. "VA", "DOD", "GSA")
+                :name,      # String — canonical full name; raw input on fallback
+                :cgac,      # String | nil — 3-digit Treasury CGAC code (e.g. "036")
+                :aliases    # Array<String> — known variant strings (frozen)
 
-    def self.from_sam(hash); end
-    def self.from_usaspending(hash); end
-    def self.normalize(name_or_code); end # static lookup + alias resolution
+    def self.normalize(input); end  # 3-layer lookup; never raises, never nil
+    def self.canonical(code); end   # known Agency for a code, or nil
+    def self.all; end               # frozen array of shipped canonical agencies
     def to_h; end
-    def ==(other); end                    # equality by canonical code, not name
+    def ==(other); end              # equality by code when both have one, else by name
   end
 end
 ```
 
 ### Normalization strategy
 
-Two layers, in order:
+Three layers, in order, **no fuzzy match** (rejected — false-positive risk too high; "Department of Education" → "Department of Energy" is a real failure mode for any cheap string metric):
 
-1. **Static lookup table** shipped with the gem (`data/agencies.yml`). Keyed by FPDS code, with `aliases:` listing every name variant the gem has seen for that agency. Built by merging FPDS's official agency table with hand-curated aliases from Vindor's prior pipeline.
-2. **Fuzzy match fallback** for misses. Cheap: lowercased Jaro-Winkler against the aliases of all entries above 0.9 similarity. **Fuzzy match is a fallback, not the primary path** — if the lookup table is current, ~98% of inputs resolve via exact alias match.
+1. **Consumer-registered aliases** from `Contractkit.configure { |c| c.agency_aliases.merge!(...) }`. Takes precedence so consumers can patch in-process without waiting for a gem release.
+2. **Shipped baseline table** at `lib/contractkit/data/agency_aliases.json`. v0.1 covers **~25 cabinet-level departments** (15 statutory cabinet departments + major independent agencies). Subtier coverage (service branches, components, offices) is v0.2.
+3. **Raw-string fallback.** Returns `Agency.new(code: nil, name: <raw>, cgac: nil, aliases: [])`. Never raises. Consumers detect un-normalized cases by checking `agency.code.nil?`.
 
-If both fail, `Agency#name` falls back to `raw_name` and `code` is `nil`. The gem logs (at debug level) when this happens so the lookup table can be improved.
-
-> ⚠️ FILL IN: What's Vindor's tolerance for an `Agency` with `nil` code? Should `Opportunity#agency` always be non-nil, falling back to a stub Agency with just `raw_name`? Confirm and document.
+See [[agency-normalization]] for the full design rationale and the alias-table structure.
 
 ---
 
