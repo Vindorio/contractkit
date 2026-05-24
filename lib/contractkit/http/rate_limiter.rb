@@ -2,6 +2,7 @@
 
 require "faraday"
 require "monitor"
+require_relative "../instrumentation"
 
 module Contractkit
   module Http
@@ -103,7 +104,15 @@ module Contractkit
       end
 
       def call(env)
-        bucket_for(env.url.host)&.take
+        wait = bucket_for(env.url.host)&.take
+        if wait&.positive?
+          Instrumentation.emit(
+            "contractkit.rate_limit_wait",
+            host: env.url.host,
+            wait_seconds: wait.round(3)
+          )
+        end
+
         @app.call(env).on_complete do |response_env|
           handle_429(response_env, env.url.host) if response_env.status == 429
         end
