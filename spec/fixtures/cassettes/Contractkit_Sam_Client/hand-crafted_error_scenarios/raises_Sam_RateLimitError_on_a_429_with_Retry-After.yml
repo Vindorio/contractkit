@@ -1,0 +1,41 @@
+---
+# Hand-crafted cassette. Triggering a real 429 from SAM is impractical
+# (slow, flaky, exhausts the dev key) so this synthesizes the response
+# shape SAM returns when over its per-minute throttle. Verified shape:
+# - 429 Too Many Requests
+# - Retry-After header in seconds
+# - JSON body with api.data.gov-style error envelope
+# Update if SAM ever changes their 429 shape.
+http_interactions:
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&limit=1&ncode=541512&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 429
+      message: Too Many Requests
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:30:00 GMT
+      Content-Type:
+      - application/json
+      Retry-After:
+      - '60'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"error":{"code":"OVER_RATE_LIMIT","message":"You have exceeded your rate limit. Try again later."}}'
+    http_version: '1.1'
+  recorded_at: Sun, 24 May 2026 02:30:00 GMT
+recorded_with: VCR 6.4.0

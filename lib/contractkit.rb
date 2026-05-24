@@ -10,6 +10,8 @@ require_relative "contractkit/http/rate_limiter"
 require_relative "contractkit/http/instrumentation_middleware"
 require_relative "contractkit/http/cache_middleware"
 require_relative "contractkit/http/connection"
+require_relative "contractkit/sam/pagination"
+require_relative "contractkit/sam/client"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
 module Contractkit
