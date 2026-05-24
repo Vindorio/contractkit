@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "source": "GSA Product and Service Codes (PSC) manual",
+    "scope": "v0.1 procurement-focused subset (~25 codes) plus the full first-character category map. Full ~5000-code coverage is v0.2 data-only work."
+  },
+  "categories": {
+    "A": "R&D",
+    "B": "Special Studies and Analyses (not R&D)",
+    "C": "Architect and Engineering Services",
+    "D": "IT and Telecom",
+    "E": "Purchase of Structures and Facilities",
+    "F": "Natural Resources and Conservation Services",
+    "G": "Social Services",
+    "H": "Quality Control, Testing, and Inspection Services",
+    "J": "Maintenance, Repair, and Rebuilding of Equipment",
+    "K": "Modification of Equipment",
+    "L": "Technical Representative Services",
+    "M": "Operation of Government-Owned Facilities",
+    "N": "Installation of Equipment",
+    "P": "Salvage Services",
+    "Q": "Medical Services",
+    "R": "Professional Services",
+    "S": "Utilities and Housekeeping Services",
+    "T": "Photographic, Mapping, Printing, and Publication Services",
+    "U": "Education and Training Services",
+    "V": "Transportation, Travel, and Relocation Services",
+    "W": "Lease or Rental of Equipment",
+    "X": "Lease or Rental of Facilities",
+    "Y": "Construction of Structures and Facilities",
+    "Z": "Maintenance, Repair, and Alteration of Real Property"
+  },
+  "entries": [
+    { "code": "A111", "title": "R&D - Defense Systems - Basic Research" },
+    { "code": "A112", "title": "R&D - Defense Systems - Applied Research" },
+    { "code": "A211", "title": "R&D - Space - Basic Research" },
+    { "code": "B549", "title": "Special Studies/Analysis - Not Otherwise Classified" },
+
+    { "code": "D301", "title": "IT and Telecom - Facility Operation and Maintenance" },
+    { "code": "D302", "title": "IT and Telecom - Systems Development Services" },
+    { "code": "D306", "title": "IT and Telecom - Systems Analysis Services" },
+    { "code": "D307", "title": "Automated Information System Design and Integration" },
+    { "code": "D308", "title": "Programming Services" },
+    { "code": "D310", "title": "IT and Telecom - Backup and Security Services" },
+    { "code": "D316", "title": "IT and Telecom - Cybersecurity" },
+    { "code": "D399", "title": "Other IT and Telecom Services" },
+
+    { "code": "M111", "title": "Operation of Office Buildings" },
+
+    { "code": "Q201", "title": "Medical Services - General Hospital" },
+
+    { "code": "R408", "title": "Program Management/Support Services" },
+    { "code": "R425", "title": "Engineering and Technical Services" },
+    { "code": "R499", "title": "Other Professional Services" },
+
+    { "code": "S214", "title": "Housekeeping - Maintenance of Real Property" },
+
+    { "code": "T001", "title": "Photographic Services" },
+
+    { "code": "U001", "title": "Lectures for Training" },
+
+    { "code": "V211", "title": "Travel/Lodging Services" },
+
+    { "code": "Y1AA", "title": "Construction of Office Buildings" }
+  ]
+}

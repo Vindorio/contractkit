@@ -1,0 +1,224 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&limit=3&ncode=541512&offset=0&postedFrom=02/01/2026&postedTo=04/30/2026&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:16:06 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Expires:
+      - '0'
+      X-Envoy-Upstream-Service-Time:
+      - '109'
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - DENY
+      Access-Control-Allow-Headers:
+      - authorization,Access-Control-Allow-Origin,Content-Type,SOAPAction,apikey,Internal-Key,apikey,ApiKey
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Activityid:
+      - 75ccebe0-a808-4000-88b4-200838bb84a3
+      Access-Control-Expose-Headers:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Server:
+      - istio-envoy
+    body:
+      encoding: ASCII-8BIT
+      string: '{"totalRecords":7,"limit":3,"offset":0,"opportunitiesData":[{"noticeId":"c15ed96359b64d42a068304a9c1c2906","title":"SERV,IRI,1U
+        THEMIS","solicitationNumber":"SPRMM1-26-Q-GB78","fullParentPathName":"DEPT
+        OF DEFENSE.DEFENSE LOGISTICS AGENCY.DLA MARITIME.DLA MARITIME MECHANICSBURG.SPRMM1
+        DLA MECHANICSBURG","fullParentPathCode":"097.97AS.DLA MARITIME.DLA MARITIME
+        MECH.SPRMM1","postedDate":"2026-04-21","type":"Solicitation","baseType":"Solicitation","archiveType":"auto15","archiveDate":"2026-05-30","typeOfSetAsideDescription":null,"typeOfSetAside":null,"responseDeadLine":"2026-05-15T16:30:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"7B22","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"KATHERINE.DAVIES@DLA.MIL","phone":"","title":null,"fullName":"Telephone:
+        6146930001"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=c15ed96359b64d42a068304a9c1c2906","organizationType":"OFFICE","officeAddress":{"zipcode":"17055-0788","city":"MECHANICSBURG","countryCode":"USA","state":"PA"},"placeOfPerformance":{"city":{"code":"3000","name":"Arlington"},"state":{"code":"VA","name":"Virginia"},"country":{"code":"USA","name":"UNITED
+        STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/c15ed96359b64d42a068304a9c1c2906/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=c15ed96359b64d42a068304a9c1c2906&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/54f8dbe062724861936b46b41ab30a3f/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/6b5d7f981650413c8afe8ac7d0263aa3/download"]},{"noticeId":"d7c83d59852b4e148d8d0245717ee19d","title":"DH10--DIGITAL
+        WAYFINDING","solicitationNumber":"36C26226Q0506","fullParentPathName":"VETERANS
+        AFFAIRS, DEPARTMENT OF.VETERANS AFFAIRS, DEPARTMENT OF.262-NETWORK CONTRACT
+        OFFICE 22 (36C262)","fullParentPathCode":"036.3600.36C262","postedDate":"2026-04-20","type":"Solicitation","baseType":"Solicitation","archiveType":"autocustom","archiveDate":"2026-05-24","typeOfSetAsideDescription":null,"typeOfSetAside":null,"responseDeadLine":"2026-04-24T13:00:00-06:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DH10","active":"Yes","award":{"awardee":{}},"pointOfContact":[{"fax":null,"type":"primary","email":"felicia.simpson@va.gov","phone":null,"title":"Contract
+        Specialist","fullName":"Felicia L Simpson"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=d7c83d59852b4e148d8d0245717ee19d","organizationType":"OFFICE","officeAddress":{"zipcode":"85297","city":"Gilbert","countryCode":"USA","state":"AZ"},"placeOfPerformance":{"city":{},"state":{},"country":{}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/d7c83d59852b4e148d8d0245717ee19d/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=d7c83d59852b4e148d8d0245717ee19d&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/2d19ec79d4d94911a0cabd7c45d9dcc3/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/31bf4db42f444b17a93bb7bee147d972/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/40c6ef2598b040008a9636d8556bc151/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/4a871b6ae97e4038b2ccda7332222b21/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/56e0e693646943758281073962306e76/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/936837f5494d45feb32da2551a46d029/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d2d48586e5c34f69bb794ec448c29f32/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d9268b32693544269e1e99d9fa0cf718/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/f4d823bc3e864ee69088b2d21442c684/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/fecaafdb9575460fb65d573480506e6b/download"]},{"noticeId":"380cd89564f8447e9db3cda958f6b968","title":"DHS/CBP
+        Commercial Solutions Opening - General Solicitation Release - Illegal Transshipment
+        Pilot - CSOP-BP-GS-26-0001","solicitationNumber":"CSOP-BP-GS-26-0001","fullParentPathName":"HOMELAND
+        SECURITY, DEPARTMENT OF.US CUSTOMS AND BORDER PROTECTION.MISSION SUPPORT CONTRACTING
+        DIVISION","fullParentPathCode":"070.7014.70B06C","postedDate":"2026-04-15","type":"Solicitation","baseType":"Solicitation","archiveType":"autocustom","archiveDate":"2026-09-30","typeOfSetAsideDescription":"No
+        Set aside used","typeOfSetAside":"NONE","responseDeadLine":"2026-04-24T15:00:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DA01","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"peter.a.giambone@cbp.dhs.gov","phone":"","title":null,"fullName":"Peter
+        Giambone"},{"fax":"","type":"secondary","email":"joshua.bedregal@cbp.dhs.gov","phone":"","title":null,"fullName":"Joshua
+        Bedregal"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=380cd89564f8447e9db3cda958f6b968","organizationType":"OFFICE","officeAddress":{"zipcode":"20229","city":"WASHINGTON","countryCode":"USA","state":"DC"},"placeOfPerformance":{"city":{"code":"50000","name":"Washington"},"state":{"code":"DC","name":"District
+        of Columbia"},"zip":"20001","country":{"code":"USA","name":"UNITED STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/380cd89564f8447e9db3cda958f6b968/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=380cd89564f8447e9db3cda958f6b968&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/8d5d22bb23c54bfd94fcf531adac731d/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/b163f0e99a2140c395bf3f58162bbd43/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/f837a1da82b94f3cb4ba1a41391ddaae/download"]}],"links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?limit=3&ncode=541512&offset=0&postedFrom=02%2F01%2F2026&postedTo=04%2F30%2F2026&ptype=p%2Co"}]}'
+  recorded_at: Sun, 24 May 2026 02:16:07 GMT
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&limit=3&ncode=541512&offset=3&postedFrom=02/01/2026&postedTo=04/30/2026&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:16:07 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Expires:
+      - '0'
+      X-Envoy-Upstream-Service-Time:
+      - '121'
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - DENY
+      Access-Control-Allow-Headers:
+      - authorization,Access-Control-Allow-Origin,Content-Type,SOAPAction,apikey,Internal-Key,apikey,ApiKey
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Activityid:
+      - 91a2d83c-c3f4-4443-87f2-85b2925ad4fe
+      Access-Control-Expose-Headers:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Server:
+      - istio-envoy
+    body:
+      encoding: ASCII-8BIT
+      string: '{"totalRecords":7,"limit":3,"offset":3,"opportunitiesData":[{"noticeId":"8b10373744dc469b8f728ce722bf5ea0","title":"Polaris
+        GWAC Women Owned Small Business Pool","solicitationNumber":"47QTCB22R0003","fullParentPathName":"GENERAL
+        SERVICES ADMINISTRATION.FEDERAL ACQUISITION SERVICE.GSA/FAS ITC OFFICE OF
+        ACQUISITION OPERATIONS, INTERAGENCY CONTRACTS","fullParentPathCode":"047.4732.47QTCB","postedDate":"2026-03-31","type":"Solicitation","baseType":"Solicitation","archiveType":"autocustom","archiveDate":"2026-12-31","typeOfSetAsideDescription":"Women-Owned
+        Small Business","typeOfSetAside":"WOSB","responseDeadLine":"2022-10-07T16:00:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DA01","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"Polaris@gsa.gov","phone":"","title":null,"fullName":"Angela
+        Chiu, Contracting Officer"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=8b10373744dc469b8f728ce722bf5ea0","organizationType":"OFFICE","officeAddress":{"zipcode":"20405","city":"WASHINGTON","countryCode":"USA","state":"DC"},"placeOfPerformance":{},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/8b10373744dc469b8f728ce722bf5ea0/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=8b10373744dc469b8f728ce722bf5ea0&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/011cf78e35a6469a96259e383122ff2a/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/082deb540dd448f397681ef2744f2da8/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0ae986458aef4897b0ec701884f4b01c/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0d537577872f47b1877dd8f4c92b0db5/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0e6af95dee464300a846c36ec9d63b81/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/134ca04cd3c64d0ab9450fe4d79eefb6/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1cf4022861b843bba038d888fb8133f0/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/340e8fbc81304ffdbefa3ad83d768a58/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/367c55e61e704867833c2adc0d369a29/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/3e939383ea0844fa882579734ecd8cfc/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/3ee30e41b7d04f3383e500dd702da36a/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/45a3a744964c4b7db1613ad64f3e603f/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/5819468ea4aa4b6d897a7ef1b5851390/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/59b66604d6e24b2086f39e857a9bcfb1/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/59c48fb295eb43548cc36ed636a0da3c/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/5a7db850c2e642cf81b44c4b76b04a82/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/6486acac30f148b4bc50ab24a260c749/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/66f2b750946b4f898f3d39125df8d190/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/72a2987ad91a48ef8de9cf2e2c712d45/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/734008c61f704f92a618b2ccfd26c809/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7c0c86bc152347fc8123c783a0ecbb4c/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7c3773cb4af347d9bdae3574b2088d81/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7e41b915a41443cca93b9a012057913d/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7ec6dd93c84e4be296ea345cc17eaef3/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7f57c5364e094d738ad0ae5664a56ab4/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/8157c18a66634e7dbd203e913fd1a85e/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/869c415705cb4a629ed9599a1c271ead/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/8750c3132e2c4942821a87736a613b2b/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/90a89605728343d3a1742e0328a5a3ba/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/92bbca669f374c5f9ad835aca45179bb/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/938937e8ce174831b65e8eebd8f177f3/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/9b4da569098d47d8890d0bc33cc7436a/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/b3d48fd5cd88440381904551590f3ccb/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/bac0472963824edfb11456f12a96f588/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/c1850c634181425fb1f8cf5f59dbe1f2/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d027dd6831ad43188595001a7d4e14f1/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/deaa1ba9fcf14d2580ee4b674bd4f4f5/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/e719a91a93044173b06f1bf893409ddb/download"]},{"noticeId":"d6c40d9ab7b34c86a518a23995fd3114","title":"Federal
+        Bureau of Prisons Inmate Tablet Implementation Initiative","solicitationNumber":"15BPCC26R00000001","fullParentPathName":"JUSTICE,
+        DEPARTMENT OF.FEDERAL PRISON SYSTEM / BUREAU OF PRISONS.PRIVATIZATION - CO","fullParentPathCode":"015.1540.15BPCC","postedDate":"2026-03-27","type":"Solicitation","baseType":"Solicitation","archiveType":"autocustom","archiveDate":"2026-12-23","typeOfSetAsideDescription":"No
+        Set aside used","typeOfSetAside":"NONE","responseDeadLine":"2026-04-03T14:00:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DA10","active":"Yes","award":null,"pointOfContact":[{"fax":"","type":"primary","email":"tbrayfield@bop.gov","phone":"","title":null,"fullName":"Timothy
+        Brayfield"},{"fax":"","type":"secondary","email":"rwynne@bop.gov","phone":"","title":null,"fullName":"Ryan
+        Wynne, Sr. Contracting Officer"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=d6c40d9ab7b34c86a518a23995fd3114","organizationType":"OFFICE","officeAddress":{"zipcode":"20534","city":"WASHINGTON","countryCode":"USA","state":"DC"},"placeOfPerformance":{"city":{"code":"50000","name":"Washington"},"state":{"code":"DC","name":"District
+        of Columbia"},"zip":"20534","country":{"code":"USA","name":"UNITED STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/d6c40d9ab7b34c86a518a23995fd3114/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=d6c40d9ab7b34c86a518a23995fd3114&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0684e574baf948fdacafecea394f5046/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0797a0f66f3c4e089ba7126d8b677a8e/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0eaef80d576443888723f9df066c1bfb/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1bd174a031c247f882c16646aed2ad0e/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1c4eae7a2cde4d34affb3931e85e8da8/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1c608936b1f446b69e4cfa2605658ed3/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/24e10e3be4ab4215950127431b7b1426/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/27d1afa934d747e9a38d75f8428fc5a8/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/2cf6fd4a96f448e384b333903c707788/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/30441a077175434587025a0e6679681d/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/35152451fca643b9ab400c58ef504797/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/3acf497e1a2a4c6d8fdbe5cd6a763546/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/69a72cd317c8425c9fb3c7554a2ebe24/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/6b6eb0b17c7b40e18e7bbfce78671a19/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7edec6fc83e0490791e02f5eb2b9930b/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/83582856584a4c1b88d3d8a615e3d48d/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/9c3ee89da9194f73aa77d129ea2ded85/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/a01e871d198446b4b7160158ad8bdcf6/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/a8ddd7bb096442f3b98f2eee9ef55520/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/b966a907aa4d4c90a7b01e3e71b902eb/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/be7e178647e649a68fc9754566e13aeb/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/e7efb208189841919a7302b5117f4540/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/ee467846d3054132afc8e9fcf59e1269/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/fc851e6b3a064531ab3336e8ac4600ed/download"]},{"noticeId":"d8fd56ff0f0d467ba04bb987b9da30e8","title":"Program
+        Executive Office (PEO) Defense Healthcare Management Systems (DHMS) Deployment
+        Solutions","solicitationNumber":"HT003826RE001","fullParentPathName":"DEPT
+        OF DEFENSE.DEFENSE HEALTH AGENCY (DHA).DEFENSE HEALTH AGENCY","fullParentPathCode":"097.97DH.HT0038","postedDate":"2026-03-24","type":"Presolicitation","baseType":"Presolicitation","archiveType":"autocustom","archiveDate":"2026-12-31","typeOfSetAsideDescription":"No
+        Set aside used","typeOfSetAside":"NONE","responseDeadLine":"2026-03-11T12:00:00-04:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"DA01","active":"Yes","award":null,"pointOfContact":[{"fax":null,"type":"primary","email":"hailey.s.deluca.civ@health.mil","phone":null,"title":null,"fullName":"Samantha
+        DeLuca"},{"fax":"","type":"secondary","email":"joyce.e.pace-reed.civ@health.mil","phone":"","title":null,"fullName":"Joyce
+        Elaine Pace-Reed"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=d8fd56ff0f0d467ba04bb987b9da30e8","organizationType":"OFFICE","officeAddress":{"zipcode":"22209","city":"ROSSLYN","countryCode":"USA","state":"VA"},"placeOfPerformance":{"country":{"code":"USA","name":"UNITED
+        STATES"}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/d8fd56ff0f0d467ba04bb987b9da30e8/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=d8fd56ff0f0d467ba04bb987b9da30e8&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0509d4a08b8e4a4a94eb216617c4af20/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/07a14f00a682494db4898d56732970bc/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/5459c6eb9daf41abba5f3a1206e94901/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/5fa85c483e064ffeb7ee834d045c5ddc/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/80dcfd18ac47489681ab772511490f0b/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/a1b1c3aacc044cb782faeaf57bc4a1f0/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/aa49ffb54c9d428db1fbc8554198afcc/download","https://sam.gov/api/prod/opps/v3/opportunities/resources/files/ace5203fde76465db3aad61c3250f69d/download"]}],"links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?limit=3&ncode=541512&offset=3&postedFrom=02%2F01%2F2026&postedTo=04%2F30%2F2026&ptype=p%2Co"}]}'
+  recorded_at: Sun, 24 May 2026 02:16:07 GMT
+- request:
+    method: get
+    uri: https://api.sam.gov/opportunities/v2/search?api_key=<SAM_API_KEY>&limit=3&ncode=541512&offset=6&postedFrom=02/01/2026&postedTo=04/30/2026&ptype=p,o
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:16:08 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Expires:
+      - '0'
+      X-Envoy-Upstream-Service-Time:
+      - '111'
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - DENY
+      Access-Control-Allow-Headers:
+      - authorization,Access-Control-Allow-Origin,Content-Type,SOAPAction,apikey,Internal-Key,apikey,ApiKey
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Activityid:
+      - c1b2ae88-628b-4ed5-89a8-e596d66bac65
+      Access-Control-Expose-Headers:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Server:
+      - istio-envoy
+    body:
+      encoding: ASCII-8BIT
+      string: '{"totalRecords":7,"limit":3,"offset":6,"opportunitiesData":[{"noticeId":"fb6d66f0c63245b9acda1c926828b83b","title":"W078--Non-Immersive
+        Virtual Reality Walking System","solicitationNumber":"36C24526Q0238","fullParentPathName":"VETERANS
+        AFFAIRS, DEPARTMENT OF.VETERANS AFFAIRS, DEPARTMENT OF.245-NETWORK CONTRACT
+        OFFICE 5 (36C245)","fullParentPathCode":"036.3600.36C245","postedDate":"2026-02-10","type":"Solicitation","baseType":"Sources
+        Sought","archiveType":"autocustom","archiveDate":"2026-05-29","typeOfSetAsideDescription":null,"typeOfSetAside":null,"responseDeadLine":"2026-02-28T10:00:00-05:00","naicsCode":"541512","naicsCodes":["541512"],"classificationCode":"W078","active":"Yes","award":{"awardee":{}},"pointOfContact":[{"fax":null,"type":"primary","email":"Cassie.White@va.gov","phone":null,"title":"Contract
+        Specialist","fullName":"Cassie A White"}],"description":"https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=fb6d66f0c63245b9acda1c926828b83b","organizationType":"OFFICE","officeAddress":{"zipcode":"21090","city":"LINTHICUM","countryCode":"USA","state":"MD"},"placeOfPerformance":{"city":{},"state":{},"country":{}},"additionalInfoLink":null,"uiLink":"https://sam.gov/workspace/contract/opp/fb6d66f0c63245b9acda1c926828b83b/view","links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?noticeid=fb6d66f0c63245b9acda1c926828b83b&limit=1"}],"resourceLinks":["https://sam.gov/api/prod/opps/v3/opportunities/resources/files/3c714aa4a4564c1a8eee4a1341522932/download"]}],"links":[{"rel":"self","href":"https://api.sam.gov/prod/opportunities/v2/search?limit=3&ncode=541512&offset=6&postedFrom=02%2F01%2F2026&postedTo=04%2F30%2F2026&ptype=p%2Co"}]}'
+  recorded_at: Sun, 24 May 2026 02:16:08 GMT
+recorded_with: VCR 6.4.0

@@ -1,0 +1,120 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.usaspending.gov/api/v2/search/spending_by_award/
+    body:
+      encoding: UTF-8
+      string: '{"filters":{"naics_codes":["541512"],"time_period":[{"start_date":"2026-01-01","end_date":"2026-03-31"}],"award_type_codes":["A","B","C","D"]},"fields":["Award
+        ID","Recipient Name","Recipient UEI","Award Amount","Total Outlays","Description","Contract
+        Award Type","Awarding Agency","Awarding Sub Agency","Awarding Office","Funding
+        Agency","Funding Sub Agency","Start Date","End Date","NAICS","PSC","Place
+        of Performance State Code","Place of Performance Country Code","Place of Performance
+        Zip5","recipient_id"],"page":1,"limit":5}'
+    headers:
+      User-Agent:
+      - contractkit/0.0.1 (+https://github.com/gudetimes1234/contractkit)
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 24 May 2026 02:18:08 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '5841'
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept, Cookie, origin
+      Allow:
+      - POST, OPTIONS
+      Cache-Trace:
+      - set-cache
+      Key:
+      - 91b045a5cb2b7a5f0da25b7766d667a2
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      Referrer-Policy:
+      - same-origin
+      Cross-Origin-Opener-Policy:
+      - same-origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Set-Cookie:
+      - BIGipServer~api.usaspending.gov~Shared~api.usaspending.gov_443_lbve_tcp_pl=!klCvCs82KW0C5jHwwTZg/0veML+8xuLQa2WPO7Vrbf/piPuU+h/E6SWTk3urkWwwDsZEH7fVP9N9wQ==;
+        path=/; Httponly; Secure
+      - TS01d83a7d=012fea399d761b5ab476029857d058311c169a10d89fc26726e206a54c4aad02dd3f07e1e570535164ee25654fe55b75761f8aad5a41f788c0e56d9883010aa5c3e47a2906c9a7198b7284f7664d84584b95161015;
+        Path=/
+      - cookiesession1=678A3E0D5430DD6EFB6A1956D86DEE74;Expires=Mon, 24 May 2027 02:18:08
+        GMT;Path=/;HttpOnly
+    body:
+      encoding: UTF-8
+      string: '{"spending_level":"awards","limit":5,"results":[{"internal_id":350571371,"Award
+        ID":"W91ZLK22F0006","Recipient Name":"GALAPAGOS FEDERAL SYSTEMS LLC","Recipient
+        UEI":"N3GDEB78RNF8","Award Amount":16954094.97,"Total Outlays":599373.44,"Description":"IT
+        HELP DESK SUPPORT SERVICES","Contract Award Type":"DELIVERY ORDER","Awarding
+        Agency":"Department of Defense","Awarding Sub Agency":"Department of the Army","Awarding
+        Office":null,"Funding Agency":"Department of Defense","Funding Sub Agency":"Department
+        of the Army","Start Date":"2021-12-15","End Date":"2026-12-14","NAICS":{"code":"541512","description":"COMPUTER
+        SYSTEMS DESIGN SERVICES"},"PSC":{"code":"DE10","description":"IT and Telecom
+        - End User as a Service: Help Desk;Tier 1-2,Workspace,Print,Output,Productivity
+        Tools"},"Place of Performance State Code":"MD","Place of Performance Country
+        Code":"USA","Place of Performance Zip5":"21010","recipient_id":"fff7b97c-2c49-3aea-0239-288216e117d3-C","awarding_agency_id":1173,"agency_slug":"department-of-defense","generated_internal_id":"CONT_AWD_W91ZLK22F0006_9700_47QTCB21D0243_4732"},{"internal_id":353431254,"Award
+        ID":"W91RUS25FA189","Recipient Name":"EMPOWER AI, INC.","Recipient UEI":"HC6QJAM2F4E3","Award
+        Amount":30424784.98,"Total Outlays":null,"Description":"U.S. ARMY INFORMATION
+        SYSTEMS ENGINEERING COMMAND (ISEC) MISSION ENGINEERING DIRECTORATE (MED) ARMY
+        METERING PROGRAM (AMP) SUPPORT.","Contract Award Type":"DELIVERY ORDER","Awarding
+        Agency":"Department of Defense","Awarding Sub Agency":"Department of the Army","Awarding
+        Office":null,"Funding Agency":"Department of Defense","Funding Sub Agency":"Department
+        of the Army","Start Date":"2025-09-19","End Date":"2026-09-18","NAICS":{"code":"541512","description":"COMPUTER
+        SYSTEMS DESIGN SERVICES"},"PSC":{"code":"R425","description":"SUPPORT- PROFESSIONAL:
+        ENGINEERING/TECHNICAL"},"Place of Performance State Code":"AZ","Place of Performance
+        Country Code":"USA","Place of Performance Zip5":"85613","recipient_id":"4ba55072-0228-c003-d8a4-067938e3a80a-C","awarding_agency_id":1173,"agency_slug":"department-of-defense","generated_internal_id":"CONT_AWD_W91RUS25FA189_9700_W9128Z22D0003_9700"},{"internal_id":350493726,"Award
+        ID":"W91RUS25FA021","Recipient Name":"EMPOWER AI, INC.","Recipient UEI":"HC6QJAM2F4E3","Award
+        Amount":435747.21,"Total Outlays":0.0,"Description":"CYBERSECURITY REQUIREMENTS","Contract
+        Award Type":"DELIVERY ORDER","Awarding Agency":"Department of Defense","Awarding
+        Sub Agency":"Department of the Army","Awarding Office":null,"Funding Agency":"Department
+        of Defense","Funding Sub Agency":"Department of the Army","Start Date":"2025-03-29","End
+        Date":"2027-03-28","NAICS":{"code":"541512","description":"COMPUTER SYSTEMS
+        DESIGN SERVICES"},"PSC":{"code":"DG01","description":"IT AND TELECOM - NETWORK
+        SUPPORT SERVICES (LABOR)"},"Place of Performance State Code":"AZ","Place of
+        Performance Country Code":"USA","Place of Performance Zip5":"85613","recipient_id":"4ba55072-0228-c003-d8a4-067938e3a80a-C","awarding_agency_id":1173,"agency_slug":"department-of-defense","generated_internal_id":"CONT_AWD_W91RUS25FA021_9700_W9128Z22D0003_9700"},{"internal_id":350493570,"Award
+        ID":"W91RUS24F0418","Recipient Name":"EMPOWER AI, INC.","Recipient UEI":"HC6QJAM2F4E3","Award
+        Amount":21857157.34,"Total Outlays":0.0,"Description":"DEFENSE HEALTH AGENCY
+        LOCAL AREA NETWORK/WIRELESS LOCAL AREA NETWORKS MODERNIZATION PROGRAM. SURVEY,
+        DESIGN, PROCUREMENT, INSTALLATION, IMPLEMENTATION, CLOSEOUT, AND PROJECT MANAGEMENT
+        SERVICES.","Contract Award Type":"DELIVERY ORDER","Awarding Agency":"Department
+        of Defense","Awarding Sub Agency":"Department of the Army","Awarding Office":null,"Funding
+        Agency":"Department of Defense","Funding Sub Agency":"Defense Health Agency","Start
+        Date":"2024-09-30","End Date":"2026-09-29","NAICS":{"code":"541512","description":"COMPUTER
+        SYSTEMS DESIGN SERVICES"},"PSC":{"code":"DG01","description":"IT AND TELECOM
+        - NETWORK SUPPORT SERVICES (LABOR)"},"Place of Performance State Code":"AZ","Place
+        of Performance Country Code":"USA","Place of Performance Zip5":"85613","recipient_id":"4ba55072-0228-c003-d8a4-067938e3a80a-C","awarding_agency_id":1173,"agency_slug":"department-of-defense","generated_internal_id":"CONT_AWD_W91RUS24F0418_9700_W9128Z22D0003_9700"},{"internal_id":350493522,"Award
+        ID":"W91RUS24F0307","Recipient Name":"TEKSYNAP CORPORATION","Recipient UEI":"C2T2JWN1D2K4","Award
+        Amount":23853764.56,"Total Outlays":0.0,"Description":"DEFENSE HEALTH AGENCY
+        LOCAL AREA NETWORK/WIRELESS LOCAL AREA NETWORKS MODERNIZATION PROGRAM. PROCUREMENT,
+        INSTALLATION, IMPLEMENTATION, CLOSEOUT, AND PROJECT MANAGEMENT SERVICES.","Contract
+        Award Type":"DELIVERY ORDER","Awarding Agency":"Department of Defense","Awarding
+        Sub Agency":"Department of the Army","Awarding Office":null,"Funding Agency":"Department
+        of Defense","Funding Sub Agency":"Defense Health Agency","Start Date":"2024-09-25","End
+        Date":"2026-09-29","NAICS":{"code":"541512","description":"COMPUTER SYSTEMS
+        DESIGN SERVICES"},"PSC":{"code":"DG01","description":"IT AND TELECOM - NETWORK
+        SUPPORT SERVICES (LABOR)"},"Place of Performance State Code":"AZ","Place of
+        Performance Country Code":"USA","Place of Performance Zip5":"85613","recipient_id":"bf8c69f8-88f5-8c87-a3f1-229dde3c0af4-C","awarding_agency_id":1173,"agency_slug":"department-of-defense","generated_internal_id":"CONT_AWD_W91RUS24F0307_9700_W9128Z22D0005_9700"}],"page_metadata":{"page":1,"hasNext":true,"last_record_unique_id":350493522,"last_record_sort_value":"W91RUS24F0307"},"messages":["For
+        searches, time period start and end dates are currently limited to an earliest
+        date of 2007-10-01.  For data going back to 2000-10-01, use either the Custom
+        Award Download feature on the website or one of our download or bulk_download
+        API endpoints as listed on https://api.usaspending.gov/docs/endpoints. "]}'
+  recorded_at: Sun, 24 May 2026 02:18:08 GMT
+recorded_with: VCR 6.4.0

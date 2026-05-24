@@ -1,0 +1,128 @@
+{
+  "_meta": {
+    "source": "SAM.gov documented set-aside type codes; cross-checked against USASpending type_set_aside vocabulary",
+    "policy": "SAM raw codes are the source of truth. The :symbol form is a Ruby ergonomics layer derived 1:1 from the code. The :label is the human-readable rendering for UIs. Aliases capture observed variants (USASpending mixed-case strings, common human shorthand)."
+  },
+  "entries": [
+    {
+      "code": "NONE",
+      "symbol": "none",
+      "label": "Full and Open",
+      "aliases": ["", "Full and Open", "Full And Open Competition", "Unrestricted"]
+    },
+    {
+      "code": "SBA",
+      "symbol": "small_business",
+      "label": "Small Business Set-Aside",
+      "aliases": ["Total Small Business", "Total Small Business Set-Aside", "Small Business"]
+    },
+    {
+      "code": "SBP",
+      "symbol": "small_business_partial",
+      "label": "Partial Small Business Set-Aside",
+      "aliases": ["Partial Small Business", "Partial Small Business Set-Aside"]
+    },
+    {
+      "code": "8A",
+      "symbol": "sba_8a",
+      "label": "8(a) Set-Aside",
+      "aliases": ["8(a)", "8A Competed", "8(a) Competed"]
+    },
+    {
+      "code": "8AN",
+      "symbol": "sba_8a_sole_source",
+      "label": "8(a) Sole Source",
+      "aliases": ["8(a) Sole Source", "8A Sole Source"]
+    },
+    {
+      "code": "HZS",
+      "symbol": "hubzone",
+      "label": "HUBZone Set-Aside",
+      "aliases": ["HUBZone", "HUBZone Set-Aside"]
+    },
+    {
+      "code": "HZC",
+      "symbol": "hubzone_sole_source",
+      "label": "HUBZone Sole Source",
+      "aliases": ["HUBZone Sole Source"]
+    },
+    {
+      "code": "SDVOSBS",
+      "symbol": "sdvosb",
+      "label": "SDVOSB Set-Aside",
+      "aliases": ["SDVOSB", "Service-Disabled Veteran-Owned Small Business", "SDVOSB Set-Aside"]
+    },
+    {
+      "code": "SDVOSBC",
+      "symbol": "sdvosb_sole_source",
+      "label": "SDVOSB Sole Source",
+      "aliases": ["SDVOSB Sole Source"]
+    },
+    {
+      "code": "VSA",
+      "symbol": "vosb",
+      "label": "Veteran-Owned Small Business Set-Aside",
+      "aliases": ["VOSB", "Veteran-Owned Small Business", "VOSB Set-Aside"]
+    },
+    {
+      "code": "VSS",
+      "symbol": "vosb_sole_source",
+      "label": "VOSB Sole Source",
+      "aliases": ["VOSB Sole Source"]
+    },
+    {
+      "code": "WOSB",
+      "symbol": "wosb",
+      "label": "Women-Owned Small Business Set-Aside",
+      "aliases": ["Women-Owned Small Business", "WOSB Set-Aside"]
+    },
+    {
+      "code": "WOSBSS",
+      "symbol": "wosb_sole_source",
+      "label": "WOSB Sole Source",
+      "aliases": ["WOSB Sole Source"]
+    },
+    {
+      "code": "EDWOSB",
+      "symbol": "edwosb",
+      "label": "Economically Disadvantaged WOSB Set-Aside",
+      "aliases": ["Economically Disadvantaged Women-Owned Small Business", "EDWOSB Set-Aside"]
+    },
+    {
+      "code": "EDWOSBSS",
+      "symbol": "edwosb_sole_source",
+      "label": "EDWOSB Sole Source",
+      "aliases": ["EDWOSB Sole Source"]
+    },
+    {
+      "code": "IEE",
+      "symbol": "indian_economic_enterprise",
+      "label": "Indian Economic Enterprise",
+      "aliases": ["Indian Economic Enterprise Set-Aside"]
+    },
+    {
+      "code": "ISBEE",
+      "symbol": "indian_small_business_economic_enterprise",
+      "label": "Indian Small Business Economic Enterprise",
+      "aliases": ["Indian Small Business Economic Enterprise Set-Aside"]
+    },
+    {
+      "code": "BICiv",
+      "symbol": "buy_indian",
+      "label": "Buy Indian Set-Aside",
+      "aliases": ["Buy Indian"]
+    },
+    {
+      "code": "LAS",
+      "symbol": "local_area_set_aside",
+      "label": "Local Area Set-Aside",
+      "aliases": ["Local Area Set Aside"]
+    },
+    {
+      "code": "RP",
+      "symbol": "recovery_purchasing",
+      "label": "Recovery Purchasing",
+      "aliases": ["Reserved"]
+    }
+  ]
+}

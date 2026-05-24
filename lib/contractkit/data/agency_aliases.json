@@ -1,0 +1,295 @@
+[
+  {
+    "code": "STATE",
+    "name": "Department of State",
+    "cgac": "019",
+    "aliases": [
+      "DEPARTMENT OF STATE",
+      "Department of State",
+      "STATE, DEPARTMENT OF",
+      "DEPT OF STATE",
+      "U.S. Department of State",
+      "DOS"
+    ]
+  },
+  {
+    "code": "TREAS",
+    "name": "Department of the Treasury",
+    "cgac": "020",
+    "aliases": [
+      "DEPARTMENT OF THE TREASURY",
+      "DEPT OF THE TREASURY",
+      "Department of the Treasury",
+      "TREASURY, DEPARTMENT OF THE",
+      "TREASURY"
+    ]
+  },
+  {
+    "code": "DOD",
+    "name": "Department of Defense",
+    "cgac": "097",
+    "aliases": [
+      "DEPARTMENT OF DEFENSE",
+      "DEPT OF DEFENSE",
+      "Department of Defense",
+      "DEFENSE, DEPARTMENT OF",
+      "DOD",
+      "DoD",
+      "DEPT OF THE ARMY",
+      "DEPT OF THE NAVY",
+      "DEPT OF THE AIR FORCE",
+      "Department of the Army",
+      "Department of the Navy",
+      "Department of the Air Force"
+    ]
+  },
+  {
+    "code": "DOJ",
+    "name": "Department of Justice",
+    "cgac": "015",
+    "aliases": [
+      "DEPARTMENT OF JUSTICE",
+      "DEPT OF JUSTICE",
+      "Department of Justice",
+      "JUSTICE, DEPARTMENT OF",
+      "DOJ"
+    ]
+  },
+  {
+    "code": "DOI",
+    "name": "Department of the Interior",
+    "cgac": "014",
+    "aliases": [
+      "DEPARTMENT OF THE INTERIOR",
+      "DEPT OF THE INTERIOR",
+      "Department of the Interior",
+      "INTERIOR, DEPARTMENT OF THE",
+      "DOI"
+    ]
+  },
+  {
+    "code": "USDA",
+    "name": "Department of Agriculture",
+    "cgac": "012",
+    "aliases": [
+      "DEPARTMENT OF AGRICULTURE",
+      "DEPT OF AGRICULTURE",
+      "Department of Agriculture",
+      "AGRICULTURE, DEPARTMENT OF",
+      "USDA"
+    ]
+  },
+  {
+    "code": "DOC",
+    "name": "Department of Commerce",
+    "cgac": "013",
+    "aliases": [
+      "DEPARTMENT OF COMMERCE",
+      "DEPT OF COMMERCE",
+      "Department of Commerce",
+      "COMMERCE, DEPARTMENT OF",
+      "DOC"
+    ]
+  },
+  {
+    "code": "DOL",
+    "name": "Department of Labor",
+    "cgac": "016",
+    "aliases": [
+      "DEPARTMENT OF LABOR",
+      "DEPT OF LABOR",
+      "Department of Labor",
+      "LABOR, DEPARTMENT OF",
+      "DOL"
+    ]
+  },
+  {
+    "code": "HHS",
+    "name": "Department of Health and Human Services",
+    "cgac": "075",
+    "aliases": [
+      "DEPARTMENT OF HEALTH AND HUMAN SERVICES",
+      "DEPT OF HEALTH AND HUMAN SERVICES",
+      "Department of Health and Human Services",
+      "HEALTH AND HUMAN SERVICES, DEPARTMENT OF",
+      "HHS"
+    ]
+  },
+  {
+    "code": "HUD",
+    "name": "Department of Housing and Urban Development",
+    "cgac": "086",
+    "aliases": [
+      "DEPARTMENT OF HOUSING AND URBAN DEVELOPMENT",
+      "DEPT OF HOUSING AND URBAN DEVELOPMENT",
+      "Department of Housing and Urban Development",
+      "HOUSING AND URBAN DEVELOPMENT, DEPARTMENT OF",
+      "HUD"
+    ]
+  },
+  {
+    "code": "DOT",
+    "name": "Department of Transportation",
+    "cgac": "069",
+    "aliases": [
+      "DEPARTMENT OF TRANSPORTATION",
+      "DEPT OF TRANSPORTATION",
+      "Department of Transportation",
+      "TRANSPORTATION, DEPARTMENT OF",
+      "DOT"
+    ]
+  },
+  {
+    "code": "DOE",
+    "name": "Department of Energy",
+    "cgac": "089",
+    "aliases": [
+      "DEPARTMENT OF ENERGY",
+      "DEPT OF ENERGY",
+      "Department of Energy",
+      "ENERGY, DEPARTMENT OF",
+      "DOE"
+    ]
+  },
+  {
+    "code": "ED",
+    "name": "Department of Education",
+    "cgac": "091",
+    "aliases": [
+      "DEPARTMENT OF EDUCATION",
+      "DEPT OF EDUCATION",
+      "Department of Education",
+      "EDUCATION, DEPARTMENT OF",
+      "ED"
+    ]
+  },
+  {
+    "code": "VA",
+    "name": "Department of Veterans Affairs",
+    "cgac": "036",
+    "aliases": [
+      "DEPARTMENT OF VETERANS AFFAIRS",
+      "DEPT OF VETERANS AFFAIRS",
+      "Department of Veterans Affairs",
+      "VETERANS AFFAIRS, DEPARTMENT OF",
+      "VA"
+    ]
+  },
+  {
+    "code": "DHS",
+    "name": "Department of Homeland Security",
+    "cgac": "070",
+    "aliases": [
+      "DEPARTMENT OF HOMELAND SECURITY",
+      "DEPT OF HOMELAND SECURITY",
+      "Department of Homeland Security",
+      "HOMELAND SECURITY, DEPARTMENT OF",
+      "DHS"
+    ]
+  },
+  {
+    "code": "GSA",
+    "name": "General Services Administration",
+    "cgac": "047",
+    "aliases": [
+      "GENERAL SERVICES ADMINISTRATION",
+      "General Services Administration",
+      "GSA"
+    ]
+  },
+  {
+    "code": "NASA",
+    "name": "National Aeronautics and Space Administration",
+    "cgac": "080",
+    "aliases": [
+      "NATIONAL AERONAUTICS AND SPACE ADMINISTRATION",
+      "National Aeronautics and Space Administration",
+      "NASA"
+    ]
+  },
+  {
+    "code": "EPA",
+    "name": "Environmental Protection Agency",
+    "cgac": "068",
+    "aliases": [
+      "ENVIRONMENTAL PROTECTION AGENCY",
+      "Environmental Protection Agency",
+      "EPA"
+    ]
+  },
+  {
+    "code": "SBA",
+    "name": "Small Business Administration",
+    "cgac": "073",
+    "aliases": [
+      "SMALL BUSINESS ADMINISTRATION",
+      "Small Business Administration",
+      "SBA"
+    ]
+  },
+  {
+    "code": "USAID",
+    "name": "United States Agency for International Development",
+    "cgac": "072",
+    "aliases": [
+      "AGENCY FOR INTERNATIONAL DEVELOPMENT",
+      "Agency for International Development",
+      "UNITED STATES AGENCY FOR INTERNATIONAL DEVELOPMENT",
+      "United States Agency for International Development",
+      "USAID",
+      "U.S. Agency for International Development"
+    ]
+  },
+  {
+    "code": "NSF",
+    "name": "National Science Foundation",
+    "cgac": "049",
+    "aliases": [
+      "NATIONAL SCIENCE FOUNDATION",
+      "National Science Foundation",
+      "NSF"
+    ]
+  },
+  {
+    "code": "SSA",
+    "name": "Social Security Administration",
+    "cgac": "028",
+    "aliases": [
+      "SOCIAL SECURITY ADMINISTRATION",
+      "Social Security Administration",
+      "SSA"
+    ]
+  },
+  {
+    "code": "OPM",
+    "name": "Office of Personnel Management",
+    "cgac": "024",
+    "aliases": [
+      "OFFICE OF PERSONNEL MANAGEMENT",
+      "Office of Personnel Management",
+      "OPM"
+    ]
+  },
+  {
+    "code": "NRC",
+    "name": "Nuclear Regulatory Commission",
+    "cgac": "031",
+    "aliases": [
+      "NUCLEAR REGULATORY COMMISSION",
+      "Nuclear Regulatory Commission",
+      "NRC"
+    ]
+  },
+  {
+    "code": "USPS",
+    "name": "United States Postal Service",
+    "cgac": "018",
+    "aliases": [
+      "UNITED STATES POSTAL SERVICE",
+      "United States Postal Service",
+      "U.S. POSTAL SERVICE",
+      "POSTAL SERVICE",
+      "USPS"
+    ]
+  }
+]

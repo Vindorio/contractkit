@@ -12,6 +12,7 @@ group :development do
 end
 
 group :test do
+  gem "activesupport", "~> 7.0", require: false # for testing the AS::Notifications integration path
   gem "rspec", "~> 3.0"
   gem "vcr", "~> 6.0"
   gem "webmock", "~> 3.18"
