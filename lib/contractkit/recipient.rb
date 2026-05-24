@@ -29,5 +29,22 @@ module Contractkit
     def hash
       [uei, name].hash
     end
+
+    # Fetches a Recipient by UEI via USASpending's
+    # /api/v2/recipient/duns/{uei}/ endpoint (the "duns" path is legacy
+    # — the API moved to UEI in 2022 but kept the URL stable).
+    #
+    # Raises {Contractkit::NotFoundError} when the UEI isn't on file.
+    def self.find(uei, client: nil)
+      raw = (client || Contractkit::Usaspending::Client.new).raw_recipient(uei)
+
+      new(
+        name: raw["name"] || raw["recipient_name"],
+        uei: raw["uei"] || uei,
+        duns: raw["duns"],
+        recipient_id: raw["recipient_id"] || raw["id"],
+        raw: raw
+      )
+    end
   end
 end

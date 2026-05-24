@@ -23,6 +23,7 @@ require_relative "contractkit/sam/response_parser"
 require_relative "contractkit/recipient"
 require_relative "contractkit/period"
 require_relative "contractkit/award"
+require_relative "contractkit/award_search"
 require_relative "contractkit/usaspending/response_parser"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
