@@ -96,6 +96,20 @@ module Contractkit
       notice_id.hash
     end
 
+    # Awards likely related to this opportunity. Delegates to
+    # {Contractkit::CrossReference.awards_for}. See cross-reference docs
+    # for matching strategy.
+    def related_awards(**)
+      Contractkit::CrossReference.awards_for(opportunity: self, **)
+    end
+
+    # Returns the dominant recipient (>50% of obligation across related
+    # awards) as a {Contractkit::Recipient}, or nil when ambiguous. See
+    # {Contractkit::CrossReference.likely_incumbent}.
+    def likely_incumbent(**)
+      Contractkit::CrossReference.likely_incumbent(related_awards(**))
+    end
+
     # ----------------------------------------------------------------
     # Resource-module surface — module-level convenience over the global
     # configuration. Multi-tenant consumers pass a Client.new explicitly
