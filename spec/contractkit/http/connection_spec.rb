@@ -56,13 +56,18 @@ RSpec.describe Contractkit::Http::Connection do
       stubs.verify_stubbed_calls
     end
 
-    it "does not retry a 429 (delegated to the rate limiter middleware in #11)" do
+    it "does not retry a 429 — the rate limiter middleware raises RateLimitError first" do
       stubs = Faraday::Adapter::Test::Stubs.new do |s|
         s.get("/rate-limited") { [429, { "Retry-After" => "5" }, "slow"] }
       end
 
-      response = build_with(config, stubs).get("/rate-limited")
-      expect(response.status).to eq(429)
+      conn = build_with(config, stubs)
+
+      # 429 surfaces as a Contractkit::RateLimitError (per-API subclass when
+      # the host is recognized; cross-API base for unknown hosts). It never
+      # reaches the retry middleware.
+      expect { conn.get("/rate-limited") }
+        .to raise_error(Contractkit::RateLimitError) { |e| expect(e.status).to eq(429) }
       stubs.verify_stubbed_calls
     end
 
