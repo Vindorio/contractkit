@@ -82,26 +82,20 @@ module Contractkit
     def self.for_award(award_id, client: nil, limit: nil)
       c = client || Contractkit::Usaspending::Client.new
       out = []
-      filters = { "award_id" => award_id }
-      c.subawards(filters: filters, limit: limit) do |batch|
+      c.subawards(award_id: award_id, limit: limit) do |batch|
         out.concat(Contractkit::Usaspending::ResponseParser.parse_subawards(batch))
       end
       out
     end
 
-    # Search subawards by arbitrary USASpending filter hash. Returns an
-    # Enumerator (record-level) when no block; yields batches when a
-    # block is given.
-    def self.search(filters: {}, client: nil, limit: nil, per_page: nil, &block)
-      c = client || Contractkit::Usaspending::Client.new
-      enum = Enumerator.new do |y|
-        c.subawards(filters: filters, limit: limit, per_page: per_page || 100) do |batch|
-          Contractkit::Usaspending::ResponseParser.parse_subawards(batch).each { |s| y << s }
-        end
-      end
-      return enum unless block
-
-      enum.each(&block)
+    # Bulk subaward search is no longer available upstream — the
+    # `/search/spending_by_subaward/` endpoint was removed in 2026-05.
+    # Use {.for_award} per prime. Tracked as a follow-up if/when
+    # USASpending exposes a replacement.
+    def self.search(*, **)
+      raise NotImplementedError,
+            "USASpending removed /search/spending_by_subaward/ (2026-05). " \
+            "Use Contractkit::Subaward.for_award(<prime_award_id>) instead."
     end
   end
 end

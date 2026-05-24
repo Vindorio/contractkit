@@ -81,10 +81,16 @@ module Contractkit
       # search endpoint — the difference is the `award_type_codes`
       # filter the caller used.
       #
-      # FIXME(M4): "Last Date To Order" is the search-endpoint field
-      # name when present; the detail endpoint nests it under
-      # latest_transaction_contract_data.ordering_period_end_date. Both
-      # are tried so this works against either shape.
+      # Field-name notes (verified against live USASpending responses,
+      # 2026-05):
+      # - The IDV "type" code lives at top-level `hash["type"]` (e.g.
+      #   "IDV_C"); there is no `idv_type` key. `idv_type_description`
+      #   does live under `latest_transaction_contract_data`.
+      # - "Last Date To Order" only appears on the spending_by_award
+      #   search response (often null even there). The detail endpoint
+      #   exposes no equivalent — fall back to
+      #   period_of_performance.potential_end_date, then end_date, so
+      #   the recompete helper still gets a usable expiration signal.
       # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def self.parse_idv(hash)
         contract = hash["latest_transaction_contract_data"] || {}
@@ -95,8 +101,9 @@ module Contractkit
           piid: hash["Award ID"] || hash["piid"],
           parent_piid: hash["parent_award_piid"] || hash["parent_award_id"],
           idv_type: Contractkit::CodedValue.build(
-            code: hash["idv_type"] || contract["idv_type"],
-            description: hash["idv_type_description"] || contract["idv_type_description"]
+            code: hash["type"] || hash["idv_type"] || contract["idv_type"],
+            description: hash["type_description"] || hash["idv_type_description"] ||
+                         contract["idv_type_description"]
           ),
           multiple_or_single_award_description:
             presence(hash["multiple_or_single_award_description"] ||
@@ -104,7 +111,8 @@ module Contractkit
           period_start_date: parse_date(hash["Start Date"] || period_hash["start_date"]),
           last_date_to_order: parse_date(hash["Last Date To Order"] ||
                                          contract["ordering_period_end_date"] ||
-                                         period_hash["last_date_to_order"]),
+                                         period_hash["last_date_to_order"] ||
+                                         period_hash["potential_end_date"]),
           period_end_date: parse_date(hash["End Date"] || period_hash["end_date"]),
           child_award_count: integer(hash["child_award_count"]),
           child_award_total_obligation: money(hash["child_award_total_obligation"]),
@@ -159,11 +167,16 @@ module Contractkit
         batch.map { |row| parse_transaction(row) }
       end
 
-      # Parses one subaward row (from spending_by_subaward or
-      # /api/v2/awards/{id}/sub_awards/) into a {Contractkit::Subaward}.
-      # The subaward search endpoint uses "Sub-Award ID", "Sub-Award
-      # Amount" with spaces (matching the spending_by_award convention);
-      # the per-award path uses snake_case. Handle both.
+      # Parses one subaward row into a {Contractkit::Subaward}.
+      #
+      # The live per-award endpoint (POST /api/v2/subawards/) returns
+      # snake_case keys and a sparse field set: id, subaward_number,
+      # description, action_date, amount, recipient_name. Prime
+      # metadata and recipient UEIs are not included.
+      #
+      # The legacy spending_by_subaward shape (spaced keys like
+      # "Sub-Award ID") is still accepted via fallbacks below in case
+      # USASpending re-introduces a bulk endpoint.
       # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def self.parse_subaward(hash)
         Contractkit::Subaward.new(
@@ -202,8 +215,12 @@ module Contractkit
       # surface populated. The detail endpoint uses snake_case keys and
       # nests contract-data fields under `latest_transaction_contract_data`.
       #
-      # FIXME(M4): field positions verified from USASpending docs as of
-      # 2026-05; verify against a live recording when a cassette is added.
+      # Field positions verified against live USASpending responses,
+      # 2026-05. Money fields land at top-level (`base_and_all_options`,
+      # `base_exercised_options`, `total_obligation`); competition
+      # fields nest under `latest_transaction_contract_data`. There is
+      # no separate `total_contract_value` key — it equals
+      # `base_and_all_options` for both definitive contracts and IDVs.
       # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def self.parse_detail(hash)
         contract = hash["latest_transaction_contract_data"] || {}
@@ -225,7 +242,8 @@ module Contractkit
           base_and_exercised_options_value: money(hash["base_exercised_options"]) ||
                                             money(contract["base_exercised_options_val"]),
           total_contract_value: money(hash["total_contract_value"]) ||
-                                money(contract["total_contract_value"]),
+                                money(contract["total_contract_value"]) ||
+                                money(hash["base_and_all_options"]),
           total_obligation: money(hash["total_obligation"]),
           number_of_offers_received: integer(contract["number_of_offers_received"]),
           extent_competed: Contractkit::CodedValue.build(

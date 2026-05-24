@@ -24,19 +24,32 @@ RSpec.describe Contractkit::Subaward do
     )
   end
 
+  # Real per-award response shape — fields verified against
+  # /api/v2/subawards/ live, 2026-05.
+  let(:real_sub) do
+    {
+      "id" => 1_934_223,
+      "subaward_number" => "3005130",
+      "description" => "MAJOR SYS/SUBSYS",
+      "action_date" => "2018-11-13",
+      "amount" => 41_314.0,
+      "recipient_name" => "ESSEX INDUSTRIES, INC."
+    }
+  end
+
   describe ".for_award" do
     it "returns all subaward rows for a prime, across pages" do
       client = instance_double(Contractkit::Usaspending::Client)
-      received_filters = nil
-      allow(client).to receive(:subawards) do |filters:, **, &block|
-        received_filters = filters
+      received_award_id = nil
+      allow(client).to receive(:subawards) do |award_id:, **, &block|
+        received_award_id = award_id
         block.call([prime_sub, other_sub])
       end
 
       result = described_class.for_award("FA877126C0042", client: client)
       expect(result.size).to eq(2)
       expect(result.map(&:sub_recipient_uei)).to include("SUBUEI002", "SUBUEI003")
-      expect(received_filters).to include("award_id" => "FA877126C0042")
+      expect(received_award_id).to eq("FA877126C0042")
     end
 
     it "returns empty array when no subawards (FFATA edge case)" do
@@ -44,6 +57,29 @@ RSpec.describe Contractkit::Subaward do
       allow(client).to receive(:subawards) # never yields
       result = described_class.for_award("small_award", client: client)
       expect(result).to eq([])
+    end
+
+    it "parses the real per-award shape (snake_case, sparse fields)" do
+      client = instance_double(Contractkit::Usaspending::Client)
+      allow(client).to receive(:subawards) do |**_kw, &block|
+        block.call([real_sub])
+      end
+      result = described_class.for_award("CONT_AWD_Z502_9700_N0001914D0022_9700",
+                                         client: client)
+      expect(result.size).to eq(1)
+      sub = result.first
+      expect(sub.subaward_number).to eq("3005130")
+      expect(sub.amount).to eq(BigDecimal("41314"))
+      expect(sub.sub_recipient_name).to eq("ESSEX INDUSTRIES, INC.")
+      expect(sub.sub_recipient_uei).to be_nil       # not in response
+      expect(sub.prime_recipient_uei).to be_nil     # not in response
+    end
+  end
+
+  describe ".search" do
+    it "raises NotImplementedError (bulk endpoint removed upstream)" do
+      expect { described_class.search }
+        .to raise_error(NotImplementedError, /spending_by_subaward/)
     end
   end
 

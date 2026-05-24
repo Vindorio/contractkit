@@ -59,10 +59,11 @@ module Contractkit
       # {Contractkit::Sam::Client} — `raw_find` + `raw_search` for the
       # two access patterns, plus an auto-paginated `search` block form.
       #
-      # FIXME(M4): exact query parameter names (ueiSAM vs uei,
-      # samRegistered, page vs pageNumber) verified from SAM Entity API
-      # docs as of 2026-05. Re-verify against a live recording when a
-      # cassette is added.
+      # Query parameter names (`ueiSAM`, `samRegistered`, `page`,
+      # `size`) are taken from the SAM Entity Management API v3 public
+      # docs (api.sam.gov, 2026-05). Live verification was blocked by
+      # SAM API daily-quota exhaustion at M4 sign-off; re-verify when
+      # a cassette is recorded against a non-throttled key. See PR #42.
       class Client
         DEFAULT_PAGE_SIZE = 100
 
@@ -176,9 +177,12 @@ module Contractkit
       # entityInformation, businessTypes, physicalAddress), assertions
       # (NAICS / PSC), and coreData.exclusionInformation when present.
       #
-      # FIXME(M4): some field names below are inferred from public docs
-      # and Tango research; replace with verified names when a real
-      # response is recorded.
+      # Field names below come from the SAM Entity Management API v3
+      # public docs and the Tango research; live verification is
+      # pending (SAM key was throttled at M4 sign-off — see Client
+      # docstring). Parser is defensive — every accessor falls back to
+      # `nil` if a key is missing, so a docs-vs-reality drift degrades
+      # to missing values rather than a crash.
       module ResponseParser
         # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         def self.parse(entity)
