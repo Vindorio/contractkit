@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Charles Gude"]
   spec.email       = ["gudetimes1234@gmail.com"]
 
-  spec.summary     = "Federal procurement data for Ruby — SAM.gov opportunities + USASpending awards"
+  spec.summary     = "Federal procurement data for Ruby (SAM.gov + USASpending.gov)"
   spec.description = <<~DESC
     contractkit aggregates federal contract opportunities (SAM.gov) and
     historical award data (USASpending.gov) into a single, framework-agnostic

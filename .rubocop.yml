@@ -1,0 +1,80 @@
+plugins:
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - "vendor/**/*"
+    - "tmp/**/*"
+    - "bin/console"
+    # One-shot tooling scripts (not gem code). Style cops add noise here.
+    - "scripts/**/*"
+
+# --- Layout & style overrides -------------------------------------------
+
+Layout/LineLength:
+  Max: 100
+
+Style/Documentation:
+  # YARD is the documentation contract (see docs/contributing/documentation-guide.md).
+  # The :Style/Documentation cop demands an RDoc-style preamble on every class,
+  # which duplicates the YARD @!attribute / @return docs we already write.
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+# --- Metrics — tuned loose for parser files arriving in M2 --------------
+# Parser files (lib/contractkit/sam/response_parser.rb, etc.) are inherently
+# long: one method per field translation. Hard caps cause more noise than
+# signal in that file class. Per-file disables can tighten in narrow cases.
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/ClassLength:
+  Max: 250
+
+Metrics/ModuleLength:
+  Max: 250
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/BlockLength:
+  AllowedMethods:
+    - describe
+    - context
+    - it
+    - shared_examples
+    - shared_context
+  Exclude:
+    - "*.gemspec"
+    - "Rakefile"
+
+Metrics/ParameterLists:
+  Max: 7
+
+# --- Naming --------------------------------------------------------------
+
+Naming/FileName:
+  # contractkit.gemspec — leave at root with the canonical name.
+  Exclude:
+    - "contractkit.gemspec"
+
+# --- Gemspec -------------------------------------------------------------
+
+Gemspec/DevelopmentDependencies:
+  # Dev deps live in the Gemfile, not the gemspec — keeps the gemspec
+  # focused on what consumers install.
+  EnforcedStyle: Gemfile
