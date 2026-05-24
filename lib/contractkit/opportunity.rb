@@ -95,5 +95,64 @@ module Contractkit
     def hash
       notice_id.hash
     end
+
+    # ----------------------------------------------------------------
+    # Resource-module surface — module-level convenience over the global
+    # configuration. Multi-tenant consumers pass a Client.new explicitly
+    # to .search / .find / .modified_since via the `client:` keyword.
+    # ----------------------------------------------------------------
+
+    class << self
+      # Returns a lazy {OpportunitySearch} over SAM matching the filters.
+      # Iteration is record-level by default (.each yields Opportunity);
+      # callers needing the batch interface use #each_batch.
+      def search(client: nil, naics: nil, **params)
+        params[:naics] = naics if naics
+        OpportunitySearch.new(client: client || default_client, params: params)
+      end
+
+      # Fetches a single Opportunity by SAM noticeId. Raises
+      # {Contractkit::NotFoundError} when no match exists.
+      def find(notice_id, client: nil)
+        result = (client || default_client).raw_search(noticeid: notice_id)
+        records = result["opportunitiesData"] || []
+        if records.empty?
+          raise Contractkit::NotFoundError.new(
+            "no SAM opportunity found for noticeId=#{notice_id.inspect}",
+            endpoint: Contractkit::Sam::Client::BASE_URL, http_method: :get,
+            params: { noticeid: notice_id }
+          )
+        end
+
+        Contractkit::Sam::ResponseParser.parse(records.first)
+      end
+
+      # Yields each Opportunity posted on or after the given time. With a
+      # block, fires per-record; without, returns an OpportunitySearch
+      # enumerator. `time` accepts Date, DateTime, Time.
+      def modified_since(time, client: nil, **params, &block)
+        result = search(
+          client: client,
+          postedFrom: to_date(time),
+          postedTo: Date.today,
+          **params
+        )
+        return result.each(&block) if block
+
+        result
+      end
+
+      private
+
+      def default_client
+        Contractkit::Sam::Client.new
+      end
+
+      def to_date(value)
+        return value if value.is_a?(Date) && !value.is_a?(DateTime)
+
+        value.respond_to?(:to_date) ? value.to_date : Date.parse(value.to_s)
+      end
+    end
   end
 end
