@@ -16,6 +16,7 @@ require_relative "contractkit/agency"
 require_relative "contractkit/naics"
 require_relative "contractkit/set_aside"
 require_relative "contractkit/psc"
+require_relative "contractkit/place_of_performance"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
 module Contractkit
