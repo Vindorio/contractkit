@@ -5,6 +5,7 @@ require "faraday/retry"
 require_relative "redactor"
 require_relative "rate_limiter"
 require_relative "instrumentation_middleware"
+require_relative "cache_middleware"
 require_relative "../instrumentation"
 
 module Contractkit
@@ -73,14 +74,21 @@ module Contractkit
           conn.options.timeout      = config.timeout
           conn.options.open_timeout = 5
 
+          # Cache is FIRST (outermost) so a hit short-circuits before any
+          # rate-limit token is consumed, retry budget burned, or
+          # instrumentation event fired. Opt-in via config.cache; no-op
+          # when cache is nil. Faraday runs request middleware in
+          # registration order; first-registered = outermost.
+          conn.request :contractkit_cache, config: config
+
           # Rate limiter must run before retry — if we're already at the
           # upstream's per-minute cap, retry waiting won't help.
           conn.request :contractkit_rate_limiter
 
           conn.request :retry, retry_options_for(config)
 
-          # Instrumentation sits after retry so emitted lifecycle events
-          # reflect the final attempt's outcome rather than the first one.
+          # Instrumentation last so emitted lifecycle events reflect the
+          # final attempt's actual outcome, not a pre-retry intent.
           conn.request :contractkit_instrumentation
 
           if config.logger
