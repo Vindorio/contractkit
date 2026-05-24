@@ -22,10 +22,17 @@ require_relative "contractkit/opportunity_search"
 require_relative "contractkit/sam/response_parser"
 require_relative "contractkit/recipient"
 require_relative "contractkit/period"
+require_relative "contractkit/coded_value"
 require_relative "contractkit/award"
 require_relative "contractkit/award_search"
+require_relative "contractkit/idv"
+require_relative "contractkit/idv_search"
+require_relative "contractkit/transaction"
+require_relative "contractkit/subaward"
 require_relative "contractkit/usaspending/response_parser"
+require_relative "contractkit/sam/entities"
 require_relative "contractkit/cross_reference"
+require_relative "contractkit/recompete"
 
 # Top-level namespace for contractkit. See README.md and docs/ for usage.
 module Contractkit

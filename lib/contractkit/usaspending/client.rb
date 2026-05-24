@@ -19,6 +19,12 @@ module Contractkit
       # Spending-by-award POST endpoint path.
       SEARCH_PATH = "/search/spending_by_award/"
       RECIPIENT_PATH = "/recipient/duns" # legacy "duns" path; the API moved to UEI but kept the URL
+      AWARD_DETAIL_PATH = "/awards"
+      TRANSACTIONS_PATH = "/transactions/"
+      # Per-award subaward endpoint. The bulk
+      # `/search/spending_by_subaward/` endpoint was removed upstream
+      # (verified 2026-05; returns 404). Only per-award lookup remains.
+      SUBAWARDS_PATH = "/subawards/"
 
       # USASpending caps spending_by_award at 100 records per page. We
       # default to that — batch yields are one-page-per-batch and matching
@@ -84,6 +90,107 @@ module Contractkit
         response = @connection.get(BASE_URL + path)
         handle_response(response, path, :get, { uei: uei })
       end
+
+      # GET /api/v2/awards/{award_id}/ — single-award detail. Returns
+      # the full pricing + competition + IDV-typed shape used by
+      # {Contractkit::Usaspending::ResponseParser.parse_detail} and
+      # {.parse_idv}. M4 (#36, #37).
+      def raw_award(award_id)
+        path = "#{AWARD_DETAIL_PATH}/#{award_id}/"
+        response = @connection.get(BASE_URL + path)
+        handle_response(response, path, :get, { award_id: award_id })
+      end
+
+      # POST /api/v2/transactions/ — modification history for one award.
+      # USASpending paginates this; we return one raw page. Use
+      # {#transactions} for the auto-paginated batch interface. M4 (#38).
+      def raw_transactions(award_id:, page: 1, limit: 100, sort: "action_date", order: "asc")
+        body = {
+          award_id: award_id,
+          page: page,
+          limit: limit,
+          sort: sort,
+          order: order
+        }
+        response = @connection.post(BASE_URL + TRANSACTIONS_PATH) do |req|
+          req.headers["Content-Type"] = "application/json"
+          req.body = JSON.generate(body)
+        end
+        handle_response(response, TRANSACTIONS_PATH, :post, body)
+      end
+
+      # Auto-paginated batch transactions iterator. Yields one batch per
+      # API page (the raw `results` array). See {#search} for the
+      # contract. M4 (#38).
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def transactions(award_id:, limit: nil, per_page: DEFAULT_PAGE_SIZE, &block)
+        unless block
+          return enum_for(:transactions, award_id: award_id, limit: limit, per_page: per_page)
+        end
+
+        page = 1
+        yielded = 0
+        loop do
+          response = raw_transactions(award_id: award_id, page: page, limit: per_page)
+          batch = response["results"] || []
+          break if batch.empty?
+
+          batch = batch.first(limit - yielded) if limit && yielded + batch.size > limit
+
+          yield batch
+          yielded += batch.size
+
+          break if limit && yielded >= limit
+          break unless response.dig("page_metadata", "hasNext")
+
+          page += 1
+        end
+      end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+      # POST /api/v2/subawards/ — subawards for one prime award.
+      # M4 (#40). The bulk `/search/spending_by_subaward/` endpoint
+      # was removed upstream; only the per-award path remains.
+      # Response fields per row: id, subaward_number, description,
+      # action_date, amount, recipient_name (no UEI / prime metadata).
+      def raw_subawards(award_id:, page: 1, limit: DEFAULT_PAGE_SIZE)
+        body = { award_id: award_id, page: page, limit: limit }
+
+        response = @connection.post(BASE_URL + SUBAWARDS_PATH) do |req|
+          req.headers["Content-Type"] = "application/json"
+          req.body = JSON.generate(body)
+        end
+        handle_response(response, SUBAWARDS_PATH, :post, body)
+      end
+
+      # Auto-paginated subaward iterator for one prime award. Yields
+      # one batch per page. M4 (#40).
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def subawards(award_id:, limit: nil, per_page: DEFAULT_PAGE_SIZE, &block)
+        unless block
+          return enum_for(:subawards, award_id: award_id,
+                                      limit: limit, per_page: per_page)
+        end
+
+        page = 1
+        yielded = 0
+        loop do
+          response = raw_subawards(award_id: award_id, page: page, limit: per_page)
+          batch = response["results"] || []
+          break if batch.empty?
+
+          batch = batch.first(limit - yielded) if limit && yielded + batch.size > limit
+
+          yield batch
+          yielded += batch.size
+
+          break if limit && yielded >= limit
+          break unless response.dig("page_metadata", "hasNext")
+
+          page += 1
+        end
+      end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       # Auto-paginated batch interface over spending_by_award.
       #
