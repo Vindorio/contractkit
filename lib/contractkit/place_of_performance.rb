@@ -18,15 +18,18 @@ module Contractkit
       freeze
     end
 
+    # @return [Hash] flat hash of all fields (for serialization).
     def to_h
       { state: state, city: city, country: country, zip: zip }
     end
 
+    # Value-equality by full hash content (state/city/country/zip all match).
     def ==(other)
       other.is_a?(PlaceOfPerformance) && to_h == other.to_h
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       to_h.hash
     end

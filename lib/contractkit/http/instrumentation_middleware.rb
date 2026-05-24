@@ -12,6 +12,9 @@ module Contractkit
     # events reflect the actual outbound attempt the consumer observes,
     # not the pre-retry "intent."
     class InstrumentationMiddleware < Faraday::Middleware
+      # Faraday middleware entry point. Emits contractkit.request.start
+      # before the call, contractkit.request.finish on success (with
+      # status + duration), or contractkit.error on a raised exception.
       def call(env)
         start_payload = base_payload(env)
         Instrumentation.emit("contractkit.request.start", start_payload)

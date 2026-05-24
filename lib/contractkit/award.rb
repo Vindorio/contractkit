@@ -83,11 +83,13 @@ module Contractkit
       }
     end
 
+    # Value-equality by award_id (USASpending's generated_unique_award_id).
     def ==(other)
       other.is_a?(Award) && award_id == other.award_id
     end
     alias eql? ==
 
+    # @return [Integer] hash code matching the equality contract.
     def hash
       award_id.hash
     end

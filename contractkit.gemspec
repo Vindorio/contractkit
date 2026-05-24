@@ -21,15 +21,21 @@ Gem::Specification.new do |spec|
   spec.license     = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
-  spec.metadata["homepage_uri"]    = spec.homepage
+  # NOTE: homepage_uri is derived from spec.homepage automatically; don't
+  # set it explicitly to avoid the rubygems duplicate-key warning.
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"]   = "#{spec.homepage}/blob/main/CHANGELOG.md"
   spec.metadata["bug_tracker_uri"] = "#{spec.homepage}/issues"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  # Block accidental `gem push` to rubygems.org until release infrastructure
-  # (issue #28) is wired up. Will be set to "https://rubygems.org" then.
-  spec.metadata["allowed_push_host"] = "TODO_SET_AT_RELEASE_TIME"
+  # Only allow pushes to rubygems.org. The release workflow (OIDC
+  # trusted publishing) ignores this; setting it explicitly prevents
+  # an accidental `gem push` against a private gem server from a dev
+  # machine.
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+
+  # Documentation URI — used by RubyGems's project page.
+  spec.metadata["documentation_uri"] = "#{spec.homepage}/blob/main/README.md"
 
   spec.files = Dir[
     "lib/**/*",

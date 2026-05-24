@@ -17,6 +17,8 @@ module Contractkit
   # Event names follow the convention `contractkit.<area>` (see EVENTS
   # below). Payloads are plain Hashes with String|Symbol keys.
   module Instrumentation
+    # The set of event names the gem emits, in order of typical occurrence.
+    # Listed here for discoverability — callers can subscribe to any subset.
     EVENTS = %w[
       contractkit.request.start
       contractkit.request.finish

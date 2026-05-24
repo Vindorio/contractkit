@@ -27,6 +27,9 @@ module Contractkit
         @config = config
       end
 
+      # Faraday middleware entry point. Returns a Faraday::Response
+      # synthesized from the cache on hit, otherwise calls the inner app
+      # and writes the 2xx response to the cache.
       def call(env)
         return @app.call(env) unless cacheable_request?(env)
 
