@@ -115,56 +115,52 @@ Air Force (sub-tier under DoD):
 
 ## The gem's normalization strategy
 
-Three layers, in priority order:
+Three lookup layers, checked in priority order. **No fuzzy matching in v0.1** — fuzzy match was considered and rejected because the false-positive risk (matching "Department of Education" to "Department of Energy") outweighed the benefit. Exact lookup against a curated alias table is the entire mechanism.
 
-### Layer 1: Code-based matching (preferred)
+The `Agency` value object exposes four readers:
 
-When both sides expose codes (CGAC or FPDS), match on codes. Codes are stable; names drift.
+- `code` — short identifier used by consumers for indexed storage (e.g. `"VA"`, `"DOD"`, `"GSA"`)
+- `name` — canonical full name (e.g. `"Department of Veterans Affairs"`)
+- `cgac` — 3-digit Treasury CGAC code (e.g. `"036"`)
+- `aliases` — frozen array of known variant strings that resolve to this canonical form (informational)
 
+### Layer 1: Consumer-registered aliases (highest priority)
+
+Aliases registered via `config.agency_aliases` take precedence. This is the consumer escape hatch — when the gem's shipped table misses an agency the consumer cares about, the consumer patches it in-process:
+
+```ruby
+Contractkit.configure do |config|
+  config.agency_aliases.merge!(
+    "NAVAL SEA SYSTEMS COMMAND" => "DOD-NAVY",
+    "USACE"                     => "DOD-ARMY"
+  )
+end
 ```
-SAM      fullParentPathCode "9700.5700"     → toptier "097", subtier "5700"
-USAsp    toptier_code "097", subtier "5700" → match
-```
 
-This handles 70-80% of cases cleanly. The gem ships a static lookup from FPDS codes → canonical agency names (snapshot taken at gem-release time; refreshable).
+Consumer aliases pointing at an unknown code don't raise; they produce an `Agency` with `code: nil` and the registered name.
 
-### Layer 2: Canonicalization table
+### Layer 2: Shipped baseline table
 
-For when only names are available (e.g. user-supplied agency filter strings), the gem ships an aliases table:
+`lib/contractkit/data/agency_aliases.json`, hand-curated. v0.1 covers the **~25 cabinet-level departments** — the 15 statutory cabinet departments plus the major independent agencies that procure heavily (GSA, NASA, EPA, SBA, USAID, NSF, SSA, OPM, NRC, USPS). Each entry lists 5-10 known variant strings observed in real SAM and USASpending payloads.
+
+Subtier coverage (DoD service branches, DHS components, contracting offices) is **deferred to v0.2**. In v0.1, an opportunity awarded by "Department of the Air Force" still normalizes — via the aliases for `"DOD"` — but loses the Air-Force-specific signal until v0.2 introduces subtier entries.
+
+### Layer 3: Raw-string fallback
+
+If neither layer 1 nor layer 2 matches, the gem returns an `Agency` with `code: nil`, `name: <raw input>`, `cgac: nil`, `aliases: []`. **Never raises, never returns `nil`.** Consumers detect un-normalized cases by checking `agency.code.nil?` and either ship a fix back to the gem or register a local alias.
 
 ```ruby
 Contractkit::Agency.normalize("VA")
-# => #<Agency canonical:"Department of Veterans Affairs" toptier_code:"036">
+# => #<Agency code:"VA" name:"Department of Veterans Affairs" cgac:"036" aliases:[...]>
 
 Contractkit::Agency.normalize("VETERANS AFFAIRS, DEPARTMENT OF")
-# => #<Agency canonical:"Department of Veterans Affairs" toptier_code:"036">
+# => #<Agency code:"VA" name:"Department of Veterans Affairs" cgac:"036" aliases:[...]>
+
+Contractkit::Agency.normalize("ZZZ UNKNOWN INDEPENDENT THING")
+# => #<Agency code:nil name:"ZZZ UNKNOWN INDEPENDENT THING" cgac:nil aliases:[]>
 ```
 
-The table is curated, not exhaustive. It covers the top ~150 agencies (every cabinet department + every major sub-tier with >$1B in annual procurement). Long-tail agencies fall through to layer 3.
-
-### Layer 3: Fuzzy fallback
-
-If neither code nor table match, the gem applies normalized string comparison:
-1. Uppercase.
-2. Strip punctuation.
-3. Strip filler words (`DEPARTMENT`, `DEPT`, `OF`, `THE`, `,`).
-4. Compare against the canonical table's same-treated names.
-
-This catches near-misses like `DEPT OF AIR FORCE` vs `DEPARTMENT OF THE AIR FORCE` but is deliberately conservative — it returns a match only above a high similarity threshold, and never silently coerces ambiguous matches.
-
-### Override hook
-
-Because the table goes stale (agency reorganizations, new sub-tiers, renames), it must be patchable in-process:
-
-```ruby
-Contractkit::Agency.register_alias(
-  "SOME NEW NAME WE HAVENT SHIPPED YET",
-  canonical: "Department of Whatever",
-  toptier_code: "012"
-)
-```
-
-This is the contract with downstream consumers: the gem ships a good baseline, never claims to be exhaustive, and exposes a clean hook to add what we missed without monkey-patching.
+This is the contract with downstream consumers: the gem ships a small, curated baseline, never claims to be exhaustive, and exposes a clean hook to add what we missed without monkey-patching.
 
 ## What we deliberately don't try to do
 
