@@ -80,6 +80,22 @@ module Contractkit
     class RateLimitError         < Contractkit::RateLimitError; end
   end
 
+  # FPDS-specific error variants. The legacy FPDS ATOM feed has been
+  # decommissioned; this module wraps the SAM.gov Contract Awards API
+  # (the canonical successor), accessed with a SAM.gov API key.
+  module Fpds
+    # FPDS-specific 404 (resource not found).
+    class NotFoundError          < Contractkit::NotFoundError; end
+    # FPDS-specific 401/403 (bad or missing SAM API key).
+    class AuthenticationError    < Contractkit::AuthenticationError; end
+    # FPDS-specific 5xx after retries exhausted.
+    class ServerError            < Contractkit::ServerError; end
+    # FPDS-specific non-JSON or unparseable response.
+    class MalformedResponseError < Contractkit::MalformedResponseError; end
+    # FPDS-specific 429.
+    class RateLimitError         < Contractkit::RateLimitError; end
+  end
+
   # USASpending.gov-specific error variants. USASpending requires no
   # auth, so no AuthenticationError variant.
   module Usaspending

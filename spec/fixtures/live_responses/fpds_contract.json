@@ -1,0 +1,211 @@
+{
+  "awardSummary": [
+    {
+      "contractId": {
+        "subtier": {
+          "code": "9700",
+          "name": "DEPT OF DEFENSE"
+        },
+        "piid": "SPE3SU25F97V0",
+        "modificationNumber": "0",
+        "transactionNumber": "0",
+        "referencedIDVSubtier": {
+          "code": "9700",
+          "name": "DEPT OF DEFENSE"
+        },
+        "referencedIDVPiid": "SPE30023DSA78",
+        "referencedIDVModificationNumber": "0"
+      },
+      "coreData": {
+        "coreVersionId": "1.5",
+        "solicitationDate": "2025-02-20 00:00:00.000",
+        "awardOrIDV": "AWARD",
+        "awardOrIDVType": {
+          "code": "C",
+          "name": "DELIVERY ORDER"
+        },
+        "federalOrganization": {
+          "contractingInformation": {
+            "contractingDepartment": {
+              "code": "9700",
+              "name": "DEPT OF DEFENSE"
+            },
+            "contractingSubtier": {
+              "code": "97AS",
+              "name": "DEFENSE LOGISTICS AGENCY"
+            },
+            "contractingOffice": {
+              "code": "SPE3SU",
+              "name": "DLA TROOP SUPPORT"
+            }
+          },
+          "fundingInformation": {
+            "fundingDepartment": {
+              "code": "9700",
+              "name": "DEPT OF DEFENSE"
+            },
+            "fundingSubtier": {
+              "code": "97AS",
+              "name": "DEFENSE LOGISTICS AGENCY"
+            },
+            "fundingOffice": {
+              "code": "SPE3SU",
+              "name": "DLA TROOP SUPPORT"
+            },
+            "foreignFunding": {
+              "code": "X",
+              "name": "NOT APPLICABLE"
+            }
+          }
+        },
+        "acquisitionData": {
+          "typeOfContractPricing": {
+            "code": "J",
+            "name": "FIRM FIXED PRICE"
+          },
+          "multiyearContract": "NO",
+          "programAcronym": "N/A"
+        },
+        "principalPlaceOfPerformance": {
+          "city": {
+            "name": "MORTON"
+          },
+          "state": {
+            "code": "IL",
+            "name": "ILLINOIS"
+          },
+          "zipCode": "615509058",
+          "congressionalDistrict": "16",
+          "country": {
+            "code": "USA",
+            "name": "UNITED STATES"
+          }
+        },
+        "productOrServiceInformation": {
+          "productOrService": {
+            "type": "PRODUCT",
+            "code": "8915",
+            "name": "FRUITS AND VEGETABLES"
+          },
+          "principalNaics": [
+            {
+              "code": "311812",
+              "name": "COMMERCIAL BAKERIES"
+            }
+          ]
+        },
+        "competitionInformation": {
+          "extentCompeted": {
+            "code": "A",
+            "name": "FULL AND OPEN COMPETITION"
+          },
+          "solicitationProcedures": {
+            "code": "NP",
+            "name": "NEGOTIATED PROPOSAL/QUOTE"
+          },
+          "numberOfOffersSource": {
+            "code": "B",
+            "name": "IDC"
+          }
+        }
+      },
+      "awardDetails": {
+        "dates": {
+          "dateSigned": "2025-02-20T00:00:00Z",
+          "periodOfPerformanceStartDate": "2025-02-20 00:00:00.000",
+          "currentCompletionDate": "2025-02-20 00:00:00.000",
+          "ultimateCompletionDate": "2025-02-20 00:00:00.000",
+          "fiscalYear": "2025"
+        },
+        "dollars": {
+          "actionObligation": "202.39",
+          "baseDollarsObligated": "202.39",
+          "baseAndExercisedOptionsValue": "202.39",
+          "baseAndAllOptionsValue": "202.39"
+        },
+        "totalContractDollars": {
+          "totalActionObligation": "202.39",
+          "totalBaseAndExercisedOptionsValue": "202.39",
+          "totalBaseAndAllOptionsValue": "202.39"
+        },
+        "contractData": {
+          "numberOfActions": "1",
+          "referencedIDVType": {
+            "code": "B",
+            "name": "IDC"
+          }
+        },
+        "productOrServiceInformation": {
+          "descriptionOfContractRequirement": "4567323815!SALAD MIX, CHL,",
+          "placeOfManufacture": {
+            "code": "C",
+            "name": "NOT A MANUFACTURED END PRODUCT"
+          },
+          "domesticOrForeignEntity": {
+            "code": "A",
+            "name": "U.S. OWNED BUSINESS"
+          }
+        },
+        "competitionInformation": {
+          "commercialProductsAndServicesAcquisitionProcedures": {
+            "code": "A",
+            "name": "COMMERCIAL PRODUCTS/SERVICES"
+          },
+          "idvNumberOfOffersReceived": "1",
+          "numberOfOffersSource": {
+            "code": "B",
+            "name": "IDC"
+          }
+        },
+        "preferenceProgramsInformation": {
+          "contractingOfficerBusinessSizeDetermination": [
+            {
+              "code": "O",
+              "name": "OTHER THAN SMALL BUSINESS"
+            }
+          ]
+        },
+        "awardeeData": {
+          "awardeeHeader": {
+            "awardeeName": "VERMILION VALLEY PRODUCE, INC.",
+            "legalBusinessName": "VERMILION VALLEY PRODUCE, INC.",
+            "awardeeNameFromContract": "VERMILION VALLEY PRODUCE, INC."
+          },
+          "awardeeUEIInformation": {
+            "uniqueEntityId": "HKK3H54PK7C3",
+            "cageCode": "0EPU7"
+          },
+          "awardeeLocation": {
+            "streetAddress1": "310 SOUTH ST",
+            "city": "DANVILLE",
+            "state": {
+              "code": "IL",
+              "name": "ILLINOIS"
+            },
+            "zip": "618326351",
+            "country": {
+              "code": "USA",
+              "name": "UNITED STATES"
+            }
+          }
+        },
+        "transactionData": {
+          "status": {
+            "code": "F",
+            "name": "FINAL"
+          },
+          "version": "1.5",
+          "createdBy": "EBS.SYSADMIN.DLA.MIL",
+          "createdDate": "2025-02-20T19:13:54.000Z",
+          "lastModifiedBy": "DOD_CLOSEOUT",
+          "lastModifiedDate": "2025-06-11T07:18:02Z",
+          "approvedBy": "EBS.SYSADMIN.DLA.MIL",
+          "approvedDate": "2025-02-20T14:20:23Z"
+        }
+      }
+    }
+  ],
+  "totalRecords": "5691511",
+  "limit": "1",
+  "offset": "0"
+}
