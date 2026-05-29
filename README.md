@@ -8,6 +8,8 @@
 > redaction middleware.
 
 [![Status](https://img.shields.io/badge/status-pre--alpha-orange)](#status)
+[![Release](https://img.shields.io/github/v/release/gudetimes1234/contractkit?include_prereleases&label=release)](https://github.com/gudetimes1234/contractkit/releases)
+[![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-%23E05735)](https://github.com/gudetimes1234/contractkit/blob/main/CHANGELOG.md)
 
 ---
 
