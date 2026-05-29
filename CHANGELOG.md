@@ -6,6 +6,18 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **Release badges** in README: GitHub release version + changelog link.
+  First GitHub Release (v0.1.0) published at
+  https://github.com/gudetimes1234/contractkit/releases — future releases
+  are auto-created by the release workflow on tag push.
+- **Updates page** on Vindor (`/updates`) — users can see release notes
+  and changelog for the gem that powers their contract matches.
+- **Rake task** `updates:sync` in the Vindor repo that fetches latest
+  GitHub releases for contractkit and writes them to
+  `lib/data/contractkit_releases.yml` for the Updates page.
+
 ### Added — M4: Recompete & Pricing Intelligence
 
 - **Award expansion** (#36): `Contractkit::Award` gains the full
