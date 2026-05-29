@@ -3,10 +3,57 @@
 > **Federal procurement data for Ruby.** Aggregates SAM.gov contract
 > opportunities and USASpending.gov award history into a single,
 > framework-agnostic gem with typed model objects, transparent
-> pagination, opportunity-to-award cross-referencing, and built-in
-> rate-limit / retry / redaction middleware.
+> pagination, opportunity-to-award cross-referencing, recompete
+> detection, IDV tracking, and built-in rate-limit / retry /
+> redaction middleware.
 
 [![Status](https://img.shields.io/badge/status-pre--alpha-orange)](#status)
+
+---
+
+## For AI Agents
+
+This section is designed to be parseable by LLM-based coding agents
+(Claude, Codex, Copilot, etc.) for quick orientation.
+
+**Project type:** Ruby gem (no Rails dependency)
+**Ruby floor:** 3.2+
+**Key dependency:** `faraday ~> 2.0` + `faraday-retry ~> 2.0`
+**Test framework:** RSpec + VCR cassettes + WebMock (no network in CI)
+**Linter:** RuboCop
+
+**Entry point:** `lib/contractkit.rb` → `Contractkit.configure { |c| ... }`
+
+**Two data sources:**
+1. **SAM.gov** (`lib/contractkit/sam/`) — active contract opportunities
+2. **USASpending.gov** (`lib/contractkit/usaspending/`) — historical awards
+
+**Query pattern:** `Contractkit::Resource.search(params).first(n)` —
+returns typed model objects. Lazy pagination. Always read `.raw` for
+fields the gem doesn't surface.
+
+**Resource modules and what they query:**
+
+| Module | Source | Returns | Key method |
+|---|---|---|---|
+| `Contractkit::Opportunity` | SAM.gov | `Opportunity` | `.search`, `.find`, `.modified_since` |
+| `Contractkit::Award` | USASpending | `Award` | `.search`, `.updated_since` |
+| `Contractkit::Idv` | USASpending | `Idv` | `.search` |
+| `Contractkit::Transaction` | USASpending | `Transaction` | `.for_award` |
+| `Contractkit::Subaward` | USASpending | `Subaward` | `.for_award` |
+| `Contractkit::Recipient` | USASpending + SAM | `Recipient` | `.find`, `.find_entity` |
+| `Contractkit::CrossReference` | both | joins | `.awards_for`, `.likely_incumbent` |
+| `Contractkit::Recompete` | both | joins | `.expiring(within:)` |
+
+**Normalized lookup tables** (read-only, frozen at load):
+`Agency.normalize(input)`, `Naics.lookup(code)`, `Psc.lookup(code)`,
+`SetAside.normalize(input)`
+
+**Files to read first:**
+- `docs/contributing/architecture-overview.md` — mental model
+- `docs/design/data-flow.md` — data flow Mermaid diagram
+- `docs/domain/sam-gov.md` — SAM quirks you'll hit in production
+- `docs/domain/usaspending.md` — USASpending quirks
 
 ---
 
@@ -41,6 +88,50 @@ Existing options:
 `contractkit` is the missing piece: a small Ruby library that hides the
 plumbing and surfaces clean object models, with the cross-reference
 join that makes the data actually useful.
+
+## Architecture
+
+```
+                              ┌─────────────────────┐
+                              │   Your Ruby App      │
+                              └──────────┬──────────┘
+                                         │
+                              ┌──────────▼──────────┐
+                              │  Contractkit.configure│
+                              │  or Client.new(...)  │
+                              └─────┬─────────┬─────┘
+                                    │         │
+                          ┌─────────▼──┐  ┌───▼──────────┐
+                          │ SAM Client │  │ USASpending   │
+                          │ (GET + key)│  │ Client (POST) │
+                          └─────┬──────┘  └───┬───────────┘
+                                │             │
+                          ┌─────▼──────┐  ┌───▼───────────┐
+                          │    SAM.gov │  │ USASpending.gov│
+                          │  /v2/search│  │ /spending_by   │
+                          │            │  │ _award + more  │
+                          └─────┬──────┘  └───┬───────────┘
+                                │             │
+                    ┌───────────▼──┐  ┌───────▼───────────┐
+                    │ Response     │  │ Response          │
+                    │ Parser (SAM) │  │ Parser (USASpend) │
+                    └──────┬───────┘  └───────┬───────────┘
+                           │                  │
+                    ┌──────▼──────────────────▼──────┐
+                    │   Typed Model Objects          │
+                    │   Opportunity, Award, Idv,     │
+                    │   Transaction, Subaward,       │
+                    │   Recipient, Agency, ...       │
+                    └──────────────┬─────────────────┘
+                                   │
+                    ┌──────────────▼─────────────────┐
+                    │  CrossReference / Recompete    │
+                    │  (cross-source joins)          │
+                    └────────────────────────────────┘
+```
+
+**Middleware stack** (every request flows through, in order):
+cache → rate limiter → retry → instrumentation → logger → Faraday adapter
 
 ## Install
 
@@ -85,6 +176,121 @@ end
 
 For a fuller end-to-end script see
 [`examples/find_recompetes.rb`](examples/find_recompetes.rb).
+
+## Data Model Reference
+
+### SAM.gov → `Contractkit::Opportunity`
+
+| Field | Type | Description |
+|---|---|---|
+| `notice_id` | `String` | SAM unique identifier |
+| `title` | `String` | Notice title |
+| `solicitation_number` | `String?` | Solicitation number (format varies by agency) |
+| `agency` | `Agency` | Canonical agency (normalized) |
+| `posted_at` | `DateTime` | When posted to SAM |
+| `response_deadline_at` | `DateTime?` | Proposal deadline |
+| `archive_at` | `Date?` | Archive date |
+| `notice_type` | `String` | "Solicitation", "Award Notice", etc. |
+| `notice_base_type` | `String` | Coarser grouping |
+| `naics_code` | `String` | 6-char zero-padded NAICS |
+| `psc_code` | `String?` | 4-char PSC |
+| `set_aside_code` | `String?` | Raw SAM code ("8A", "SDVOSBC", etc.) |
+| `set_aside` | `Symbol` | Normalized (`:sba_8a`, `:sdvosb`, etc.) |
+| `set_aside_label` | `String?` | Human label |
+| `place_of_performance` | `PlaceOfPerformance?` | State/city/zip |
+| `contacts` | `Array<Hash>` | POCs |
+| `description` | `String?` | Full description (may contain HTML) |
+| `additional_info_url` | `String?` | External link |
+| `links` | `Array<Hash>` | HATEOAS links |
+| `attachments` | `Array<String>` | Attachment URLs |
+| `award` | `Hash?` | Populated on Award Notices only |
+| `raw` | `Hash` | Original SAM JSON |
+
+### USASpending → `Contractkit::Award`
+
+| Field | Type | Description |
+|---|---|---|
+| `award_id` | `String` | `generated_unique_award_id` |
+| `piid` | `String?` | Procurement instrument ID |
+| `parent_piid` | `String?` | For IDIQ task orders |
+| `award_type` | `String?` | "Definitive Contract", "BPA Call", etc. |
+| `obligated_amount` | `BigDecimal?` | Money obligated to date |
+| `ceiling` | `BigDecimal?` | Base + All Options |
+| `total_contract_value` | `BigDecimal?` | Ceiling alias |
+| `base_and_exercised_options_value` | `BigDecimal?` | Base + exercised options |
+| `base_and_all_options_value` | `BigDecimal?` | Full ceiling |
+| `total_obligation` | `BigDecimal?` | Sum of all transactions |
+| `number_of_offers_received` | `Integer?` | Detail-only |
+| `extent_competed` | `CodedValue?` | Detail-only (e.g. "A" = Full/Open) |
+| `type_of_contract_pricing` | `CodedValue?` | Detail-only |
+| `contract_award_type` | `CodedValue?` | Detail-only |
+| `solicitation_procedures` | `CodedValue?` | Detail-only |
+| `recipient` | `Recipient?` | Vendor identity |
+| `awarding_agency` | `Agency?` | Who awarded it |
+| `awarding_subagency_name` | `String?` | Sub-tier name |
+| `funding_agency` | `Agency?` | Who funded it (may differ) |
+| `naics_code` | `String?` | 6-char |
+| `psc_code` | `String?` | 4-char |
+| `set_aside_code` | `String?` | Raw code |
+| `set_aside` | `Symbol` | Normalized |
+| `period` | `Period?` | `{start_date, end_date}` as `Date` |
+| `place_of_performance` | `PlaceOfPerformance?` | Location |
+| `description` | `String?` | Free-text |
+| `last_modified_at` | `DateTime?` | USASpending refresh time |
+| `raw` | `Hash` | Original USASpending JSON |
+
+### USASpending → `Contractkit::Idv` (Indefinite-Delivery Vehicle)
+
+Separate class from Award. IDVs are umbrella contracts (IDC, GWAC, BPA,
+BOA, FSS) under which task/delivery orders are placed.
+
+Key fields: `piid`, `award_type`, `last_date_to_order` (primary recompete
+signal), `period_end_date`. Has `#child_awards`, `#transactions`,
+`#subawards` lazy-fetch methods.
+
+See [`docs/domain/idvs.md`](docs/domain/idvs.md).
+
+### USASpending → `Contractkit::Transaction`
+
+Per-modification history. `Award#transactions` and `Idv#transactions`
+lazy-fetch the modification stream. Key fields: `modification_number`,
+`action_date`, `federal_action_obligation` (per-mod delta),
+`action_type` (`CodedValue`).
+
+See [`docs/domain/transactions.md`](docs/domain/transactions.md).
+
+### USASpending → `Contractkit::Subaward`
+
+One-level prime → sub teaming. `Award#subawards` and `Idv#subawards`
+lazy-fetch. Both sides denormalized on the row
+(`prime_recipient_uei`, `sub_recipient_uei`).
+
+See [`docs/domain/subawards.md`](docs/domain/subawards.md).
+
+### SAM → `Contractkit::Recipient` (enriched)
+
+Two construction paths:
+- **Un-enriched** from `Award.search` → name, uei, duns only
+- **Enriched** via `Recipient.find_entity(uei)` → full SAM registration:
+  `cage_code`, `registration_status`, `sam_expiration_date`,
+  `business_types`, `sba_business_types`, `naics_list`,
+  `exclusion_status_flag`, `immediate_owner`, `highest_owner`,
+  predicates `#excluded?` and `#registration_expired?`
+
+See [`docs/domain/entities.md`](docs/domain/entities.md).
+
+### Value objects
+
+| Class | Purpose | Key methods |
+|---|---|---|
+| `Agency` | Canonical agency reference | `.normalize(input)`, `.code`, `.name`, `.cgac` |
+| `Naics` | NAICS code + hierarchy | `.lookup(code)`, `sector`, `subsector`, `label` |
+| `Psc` | Product Service Code | `.lookup(code)`, `category`, `category_label` |
+| `SetAside` | Set-aside type | `.normalize(input)`, `.label(sym)`, `.code(sym)`, predicates |
+| `PlaceOfPerformance` | Location | `.state`, `.city`, `.zip`, `.country_code`, `#domestic?` |
+| `Period` | Date range | `.start_date`, `.end_date` (both `Date`) |
+| `CodedValue` | `(code, description)` pair | `.code`, `.description` |
+| `OwnerReference` | SAM corporate owner | `.uei`, `.name`, `.cage_code` |
 
 ## Features
 
@@ -218,8 +424,41 @@ opp.likely_incumbent              # => Contractkit::Recipient or nil
 # this returns nil — the gem doesn't force a guess.
 ```
 
-See the [recompete script](examples/find_recompetes.rb) for an
-end-to-end demo.
+### Recompete detection (time-forward)
+
+New in M4. `Contractkit::Recompete.expiring(within:)` pairs expiring
+IDVs and contracts with active SAM solicitations that might be their
+follow-on.
+
+```ruby
+# Find all IDVs/contracts expiring in the next 12 months, each paired
+# with matching SAM opportunities:
+Contractkit::Recompete.expiring(within: 12) do |match|
+  puts "#{match.award.piid} expires, #{match.matching_opportunities.size} matches"
+end
+
+# As Enumerator:
+Contractkit::Recompete.expiring(within: 6, naics: "541512").first(10)
+```
+
+See [`docs/domain/recompete.md`](docs/domain/recompete.md).
+
+### Entity enrichment (SAM registration data)
+
+New in M4. Enrich a USASpending-derived `Recipient` with full SAM
+Entity Management data:
+
+```ruby
+award = Contractkit::Award.search(...).first
+sam = Contractkit::Recipient.find_entity(award.recipient.uei)
+sam.cage_code                     # => "12345"
+sam.registration_status           # => "Active"
+sam.excluded?                     # => false
+sam.business_types.first.code     # => "2X" (For Profit Organization)
+sam.sba_business_types.first.code # => "A6" (8(a))
+```
+
+See [`docs/domain/entities.md`](docs/domain/entities.md).
 
 ### Configuration
 
@@ -271,6 +510,26 @@ Built in, no configuration required:
 See [`docs/design/reliability.md`](docs/design/reliability.md) for the
 full design rationale.
 
+## Endpoint Map
+
+### SAM.gov
+
+| Endpoint | Used by | Notes |
+|---|---|---|
+| `GET /opportunities/v2/search` | `Opportunity.search`, `Opportunity.modified_since`, `Recompete.expiring` | Primary. Offset/limit pagination, max 1000/page |
+| `GET /opportunities/v2/{noticeId}` | `Opportunity.find` | Single notice lookup |
+| `GET /entity-information/v3/entities` | `Recipient.find_entity` | SAM Entity Management (registration, exclusions, ownership) |
+
+### USASpending.gov
+
+| Endpoint | Method | Used by | Notes |
+|---|---|---|---|
+| `/search/spending_by_award/` | POST | `Award.search`, `Idv.search`, `CrossReference.awards_for` | Primary. Page-based, max 100/page |
+| `/awards/{id}/` | GET | `ResponseParser.parse_detail` | Rich single-award detail (pricing, competition) |
+| `/recipient/{uei}/` | GET | `Recipient.find` | Recipient lookup |
+| `/api/v2/transactions/` | POST | `Transaction.for_award` | Per-modification history |
+| `/api/v2/subawards/` | POST | `Subaward.for_award` | Prime→sub teaming |
+
 ## Error hierarchy
 
 ```
@@ -310,7 +569,6 @@ roadmap):
 - Full PSC coverage (~5000 codes) — v0.1 ships ~25
 - Sub-tier agency normalization (DoD service branches, DHS components, etc.)
 - `Award.find` via USASpending's `/awards/{id}/` endpoint
-- Subaward / sub-recipient data
 - Async / streaming clients
 
 ## Documentation
@@ -318,12 +576,28 @@ roadmap):
 - [Domain](docs/domain/) — how the SAM and USASpending APIs actually
   work in production (rate limits, quirks, field dictionaries,
   cross-system joining)
-- [Design](docs/design/) — data models, reliability, packaging,
-  Vindor extraction plan
+- [Design](docs/design/) — data flow diagrams, data models, reliability,
+  packaging, Vindor extraction plan
 - [Contributing](docs/contributing/) — architecture overview and the
   documentation guide
 
 For a YARD-built API reference: `bundle exec yard doc && open doc/index.html`.
+
+## Example Scripts
+
+| Script | What it demonstrates |
+|---|---|
+| [`examples/basic_usage.rb`](examples/basic_usage.rb) | End-to-end smoke test: Opportunity search, Award search, cross-reference, multi-tenant client, instrumentation |
+| [`examples/find_recompetes.rb`](examples/find_recompetes.rb) | Recompete detection: search opportunities, cross-reference to awards, print incumbent summary table |
+| [`examples/query_idvs.rb`](examples/query_idvs.rb) | IDV search, parent/child traversal, `last_date_to_order` recompete signal |
+| [`examples/query_transactions.rb`](examples/query_transactions.rb) | Transaction history for an award with `action_type` analysis |
+| [`examples/query_subawards.rb`](examples/query_subawards.rb) | Subaward teaming patterns for an award |
+| [`examples/query_entities.rb`](examples/query_entities.rb) | SAM entity enrichment: registration status, exclusions, business types, ownership |
+
+All examples need a `SAM_API_KEY` env var. Run with:
+```bash
+SAM_API_KEY=<your-key> bundle exec ruby examples/<script>.rb
+```
 
 ## Contributing
 
@@ -333,7 +607,7 @@ conventions, the VCR cassette workflow, and pull request expectations.
 Quick onboarding checklist:
 
 - Read [`docs/contributing/architecture-overview.md`](docs/contributing/architecture-overview.md)
-- Read [`docs/contributing/documentation-guide.md`](docs/contributing/documentation-guide.md)
+- Read [`docs/design/data-flow.md`](docs/design/data-flow.md)
 - Run `bin/setup` then `bundle exec rake`
 
 ## License
