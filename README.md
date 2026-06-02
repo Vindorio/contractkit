@@ -7,67 +7,17 @@
 > detection, IDV tracking, and built-in rate-limit / retry /
 > redaction middleware.
 
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange)](#status)
-[![Release](https://img.shields.io/github/v/release/gudetimes1234/contractkit?include_prereleases&label=release)](https://github.com/gudetimes1234/contractkit/releases)
-[![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-%23E05735)](https://github.com/gudetimes1234/contractkit/blob/main/CHANGELOG.md)
-
----
-
-## For AI Agents
-
-This section is designed to be parseable by LLM-based coding agents
-(Claude, Codex, Copilot, etc.) for quick orientation.
-
-**Project type:** Ruby gem (no Rails dependency)
-**Ruby floor:** 3.2+
-**Key dependency:** `faraday ~> 2.0` + `faraday-retry ~> 2.0`
-**Test framework:** RSpec + VCR cassettes + WebMock (no network in CI)
-**Linter:** RuboCop
-
-**Entry point:** `lib/contractkit.rb` → `Contractkit.configure { |c| ... }`
-
-**Two data sources:**
-1. **SAM.gov** (`lib/contractkit/sam/`) — active contract opportunities
-2. **USASpending.gov** (`lib/contractkit/usaspending/`) — historical awards
-
-**Query pattern:** `Contractkit::Resource.search(params).first(n)` —
-returns typed model objects. Lazy pagination. Always read `.raw` for
-fields the gem doesn't surface.
-
-**Resource modules and what they query:**
-
-| Module | Source | Returns | Key method |
-|---|---|---|---|
-| `Contractkit::Opportunity` | SAM.gov | `Opportunity` | `.search`, `.find`, `.modified_since` |
-| `Contractkit::Award` | USASpending | `Award` | `.search`, `.updated_since` |
-| `Contractkit::Idv` | USASpending | `Idv` | `.search` |
-| `Contractkit::Transaction` | USASpending | `Transaction` | `.for_award` |
-| `Contractkit::Subaward` | USASpending | `Subaward` | `.for_award` |
-| `Contractkit::Recipient` | USASpending + SAM | `Recipient` | `.find`, `.find_entity` |
-| `Contractkit::CrossReference` | both | joins | `.awards_for`, `.likely_incumbent` |
-| `Contractkit::Recompete` | both | joins | `.expiring(within:)` |
-
-**Normalized lookup tables** (read-only, frozen at load):
-`Agency.normalize(input)`, `Naics.lookup(code)`, `Psc.lookup(code)`,
-`SetAside.normalize(input)`
-
-**Files to read first:**
-- `docs/contributing/architecture-overview.md` — mental model
-- `docs/design/data-flow.md` — data flow Mermaid diagram
-- `docs/domain/sam-gov.md` — SAM quirks you'll hit in production
-- `docs/domain/usaspending.md` — USASpending quirks
+[![Release](https://img.shields.io/github/v/release/Vindorio/contractkit?include_prereleases&label=release)](https://github.com/Vindorio/contractkit/releases)
+[![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-%23E05735)](https://github.com/Vindorio/contractkit/blob/main/CHANGELOG.md)
 
 ---
 
 ## Status
 
-**0.1.0 release candidate.** Pre-alpha. Private repo; will flip to
-public under MIT once the gem is published to rubygems.org and the
-docs have a cleanup pass.
-
+**v0.2.0 released.** Public repo under MIT license. Published to
+rubygems.org. See [CHANGELOG.md](CHANGELOG.md) for version history.
 API may change in 0.x without ceremony; we'll be conservative once we
-hit 1.0. See [CHANGELOG.md](CHANGELOG.md) for the version history and
-breaking-change policy.
+hit 1.0.
 
 ## Why this exists
 
@@ -374,9 +324,9 @@ Contractkit.configure do |c|
 end
 ```
 
-v0.1 ships ~25 cabinet-level departments (15 statutory cabinet + 10
+v0.2 ships ~25 cabinet-level departments (15 statutory cabinet + 10
 major independents — GSA, NASA, EPA, SBA, USAID, NSF, SSA, OPM, NRC,
-USPS). Sub-tier coverage is v0.2.
+USPS). Sub-tier coverage is planned.
 
 ### Set-aside normalization (SAM codes as source of truth)
 
@@ -469,7 +419,7 @@ Every option, with its default:
 ```ruby
 Contractkit.configure do |c|
   c.sam_api_key   = ENV.fetch("SAM_API_KEY")  # reads from env by default
-  c.user_agent    = "contractkit/0.1.0 (+https://github.com/...)"
+  c.user_agent    = "contractkit/0.2.0 (+https://github.com/Vindorio/contractkit)"
   c.timeout       = 30                         # read timeout (seconds)
   c.retries       = 3                          # 5xx + network errors only
   c.logger        = Rails.logger               # any Logger-shaped object
@@ -551,7 +501,7 @@ Rescue cross-API (`Contractkit::RateLimitError`) or narrowly
 
 ## What `contractkit` does NOT do
 
-Explicit non-goals; some deferred to v0.2, some permanent:
+Explicit non-goals (permanent):
 
 - **No persistence.** No ActiveRecord, no DB adapter. Consumers persist
   the objects however they want.
@@ -560,17 +510,15 @@ Explicit non-goals; some deferred to v0.2, some permanent:
 - **No user model.** No `User`, no `ContractorProfile`, no auth.
 - **No scheduling.** Consumers wrap the gem's methods in their own
   cron / ActiveJob / etc.
-- **No enrichment from non-SAM/non-USASpending sources** (no LinkedIn,
+- **No enrichment from non-federal sources** (no LinkedIn,
   no Crunchbase, no LLM scope extraction, no CPARS).
 - **No UI**, no CLI binary beyond `bin/console`, no async I/O.
 
-Deferred to **v0.2** (see [CHANGELOG.md](CHANGELOG.md) for the
-roadmap):
+Still to come:
 
-- Full NAICS 2022 coverage (~1100 codes) — v0.1 ships ~40
-- Full PSC coverage (~5000 codes) — v0.1 ships ~25
+- `Award.find` via USASpending's `/api/v2/awards/{id}/` endpoint
+- Full PSC coverage (~5 000 codes — currently ships ~25)
 - Sub-tier agency normalization (DoD service branches, DHS components, etc.)
-- `Award.find` via USASpending's `/awards/{id}/` endpoint
 - Async / streaming clients
 
 ## Documentation
