@@ -6,96 +6,41 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-02
+
 ### Added
 
-- **Release badges** in README: GitHub release version + changelog link.
-  First GitHub Release (v0.1.0) published at
-  https://github.com/gudetimes1234/contractkit/releases — future releases
-  are auto-created by the release workflow on tag push.
-- **Updates page** on Vindor (`/updates`) — users can see release notes
-  and changelog for the gem that powers their contract matches.
-- **Rake task** `updates:sync` in the Vindor repo that fetches latest
-  GitHub releases for contractkit and writes them to
-  `lib/data/contractkit_releases.yml` for the Updates page.
-
-### Added — M4: Recompete & Pricing Intelligence
-
-- **Award expansion** (#36): `Contractkit::Award` gains the full
-  three-tier pricing surface (`obligated_amount` ≤
-  `base_and_exercised_options_value` ≤ `base_and_all_options_value` /
-  `total_contract_value`) plus competition fields
+- **NAICS 2022 full dictionary** — all 1,012 six-digit codes with sector
+  and subsector parents, sourced from the Census Bureau's official 2022
+  NAICS Structure file. `Contractkit::Naics` now loads
+  `naics_2022_full.json` instead of the 40-code procurement subset.
+  `rake naics:seed` regenerates the file from Census XLSX.
+- FPDS client (`Contractkit::Fpds`) — award detail lookups from the
+  Federal Procurement Data System.
+- SAM Entity Management client (`Contractkit::Sam::Entities`) — full
+  registration, exclusion, and corporate hierarchy data.
+- IDV model (`Contractkit::Idv`) — indefinite-delivery vehicles with
+  `last_date_to_order` recompete signal, parent/child traversal.
+- Transaction model (`Contractkit::Transaction`) — per-modification
+  history from USASpending.
+- Subaward model (`Contractkit::Subaward`) — prime-to-sub teaming from
+  USASpending.
+- Recompete helper (`Contractkit::Recompete.expiring(within:)`) —
+  time-forward sibling of `CrossReference.awards_for`.
+- Award expansion — three-tier pricing surface, competition fields
   (`number_of_offers_received`, `extent_competed`,
   `type_of_contract_pricing`, `contract_award_type`,
-  `solicitation_procedures`). Competition fields populate only via the
-  new `ResponseParser.parse_detail` path; bulk search rows leave them
-  nil. See `docs/domain/award-pricing.md`.
-- **IDV model** (#37): new `Contractkit::Idv` for indefinite-delivery
-  vehicles (IDC / GWAC / BPA / BOA / FSS). Carries `last_date_to_order`
-  — the primary recompete signal. `Contractkit::Idv.search` auto-injects
-  `IDV_AWARD_TYPE_CODES` into the USASpending filter. `Award#parent_idv`
-  and `Idv#child_awards` traverse the parent/child relationship.
-  See `docs/domain/idvs.md`.
-- **Transaction model** (#38): new `Contractkit::Transaction` for
-  per-modification history from `/api/v2/transactions/`.
-  `Award#transactions` and `Idv#transactions` lazy-fetch the stream.
-  Surfaces raw `action_type` (CodedValue) — no option-exercise inference.
-  See `docs/domain/transactions.md`.
-- **Recipient enrichment** (#39): `Contractkit::Recipient` gains SAM
-  Entity Management fields (registration_status, sam_expiration_date,
-  cage_code, business_types, sba_business_types, naics_list,
-  exclusion_status_flag, immediate_owner, highest_owner, …) plus
-  `#excluded?` / `#registration_expired?` predicates. New
-  `Contractkit::Sam::Entities` client + parser + `Recipient.find_entity`.
-  USASpending-built recipients stay un-enriched; enrichment is opt-in.
-  See `docs/domain/entities.md`.
-- **Subaward model** (#40): new `Contractkit::Subaward` for one-level
-  prime → sub teaming from `/api/v2/search/spending_by_subaward/`.
-  `Award#subawards` lazy-fetches. FFATA threshold + reporting-compliance
-  caveats documented; multi-tier explicitly out of scope.
-  See `docs/domain/subawards.md`.
-- **Recompete helper** (#41): new `Contractkit::Recompete.expiring(within:)`
-  — time-forward sibling of `CrossReference.awards_for`. Pairs each
-  expiring IDV / contract with matching active SAM solicitations using
-  the same `match:` vocabulary. Block + Enumerator forms; streams
-  without accumulating. `within:` accepts plain Integer (months) or any
-  object responding to `#in_months` (so ActiveSupport::Duration works
-  without a hard dependency). See `docs/domain/recompete.md`.
-- New value object `Contractkit::CodedValue` for `(code, description)`
-  pairs across the M4 fields (extent_competed, type_of_contract_pricing,
-  action_type, business_types, …).
-- New value object `Contractkit::OwnerReference` for SAM corporate
-  hierarchy.
+  `solicitation_procedures`) via `ResponseParser.parse_detail`.
+- `CodedValue` and `OwnerReference` value objects.
 
 ### Changed
 
-- `Contractkit::CrossReference::DEFAULT_ENDING_WINDOW_MONTHS` is now
-  `12` (was 24, reserved). The comment is updated to point at
-  `Contractkit::Recompete` for the time-forward helper that consumes it.
-- **Subaward bulk search removed upstream** — USASpending deleted
-  `/api/v2/search/spending_by_subaward/` (verified 404, 2026-05-24).
-  `Contractkit::Usaspending::Client#subawards` now takes `award_id:`
-  and posts to `/api/v2/subawards/`. `Contractkit::Subaward.search`
-  raises `NotImplementedError` directing callers to `.for_award`.
-- **Parser field names verified live** (2026-05-24): `parse_idv` now
-  reads the IDV type code from top-level `hash["type"]` (no
-  `idv_type` key exists upstream); `parse_detail` documents that
-  pricing fields land at top-level `base_and_all_options` /
-  `base_exercised_options` / `total_obligation` and that there is no
-  separate `total_contract_value` key (falls back to
-  `base_and_all_options`). FIXME(M4) markers cleared except for the
-  SAM Entities client, which remains unverified (SAM key was
-  rate-limited at sign-off).
-
-### Deferred — follow-up issues to file from PR
-
-- Dedicated `Contractkit::Sam::Exclusions` client for historical /
-  multi-record exclusion lookup. M4 ships exclusion *status* via the
-  Entities response; the historical surface is filed separately.
-- Live VCR cassettes for the SAM Entities endpoint. The USASpending
-  detail / IDV / transactions / subawards endpoints are now covered
-  by parser-shape specs against committed live response fixtures in
-  `spec/fixtures/live_responses/`; SAM remains synthetic-only because
-  the API key was throttled at sign-off.
+- `Contractkit::CrossReference::DEFAULT_ENDING_WINDOW_MONTHS` changed
+  from 24 to 12.
+- Subaward client switched from deleted `/search/spending_by_subaward/`
+  to `/api/v2/subawards/` (verified 404 on old endpoint, 2026-05-24).
+  `Subaward.search` raises `NotImplementedError`; use `.for_award`.
+- Parser field names verified live against USASpending (2026-05-24).
 
 ## [0.1.0] - 2026-05-24
 
@@ -294,5 +239,6 @@ will become strict SemVer at 1.0.
 
 ---
 
-[Unreleased]: https://github.com/gudetimes1234/contractkit/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/gudetimes1234/contractkit/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Vindorio/contractkit/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Vindorio/contractkit/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/Vindorio/contractkit/releases/tag/v0.1.0

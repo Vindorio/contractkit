@@ -22,7 +22,7 @@ Key conventions:
 ## Getting set up
 
 ```bash
-git clone https://github.com/gudetimes1234/contractkit.git
+git clone https://github.com/Vindorio/contractkit.git
 cd contractkit
 bin/setup                # bundle install + any one-time prep
 bundle exec rake         # spec + lint
@@ -82,24 +82,21 @@ git push -u origin feature/my-change
 
 - Bug fixes (always — open an issue or just send a PR with a regression spec).
 - New shipped data: extending `lib/contractkit/data/agency_aliases.json`,
-  `naics_2022.json`, `psc.json`, or `set_aside_codes.json` with codes you've
+  `naics_2022_full.json`, `psc.json`, or `set_aside_codes.json` with codes you've
   hit in the wild that the gem didn't recognize. Drive-by additions welcome.
 - Docs improvements: README clarifications, fixing examples, expanding
   `docs/domain/*.md` with real-world quirks you've observed.
 - New features: please open an issue first so we can scope it before you
-  spend time. v0.2 is not yet planned in detail.
+  spend time.
 
-## What changes are deferred to v0.2
+## What changes are deferred
 
 Already-scoped follow-ups (don't duplicate work on these without coordinating):
 
-- Full NAICS 2022 coverage (~1100 codes) — currently shipping ~40
-- Full PSC coverage (~5000 codes) — currently shipping ~25
-- Sub-tier agency normalization (DoD service branches, DHS components,
-  etc.) — currently shipping cabinet-level only
 - `Award.find` via USASpending's `/api/v2/awards/{id}/` endpoint (needs
   a second parser path)
-- Subaward / sub-recipient data
+- Full PSC coverage (~5000 codes — currently ships ~25)
+- Sub-tier agency normalization (DoD service branches, DHS components, etc.)
 - Async / streaming clients
 
 ## Coding conventions

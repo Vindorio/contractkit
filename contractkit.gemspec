@@ -14,10 +14,10 @@ Gem::Specification.new do |spec|
     historical award data (USASpending.gov) into a single, framework-agnostic
     Ruby library. Handles authentication, pagination, rate limiting, retries,
     typed model objects, agency normalization, and cross-referencing
-    opportunities to related past awards. Pre-alpha.
+    opportunities to related past awards.
   DESC
 
-  spec.homepage    = "https://github.com/gudetimes1234/contractkit"
+  spec.homepage    = "https://github.com/Vindorio/contractkit"
   spec.license     = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
