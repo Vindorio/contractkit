@@ -56,8 +56,8 @@ RSpec.describe Contractkit::Naics do
   end
 
   describe ".all" do
-    it "returns the full shipped subset (≥30 entries for v0.1)" do
-      expect(described_class.all.size).to be >= 30
+    it "returns the full NAICS 2022 dictionary (≥1,000 entries)" do
+      expect(described_class.all.size).to be >= 1_000
     end
 
     it "is frozen" do

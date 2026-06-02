@@ -8,10 +8,9 @@ module Contractkit
   #
   # See docs/domain/naics-and-setasides.md for the structure overview.
   #
-  # v0.1 ships a focused procurement-relevant subset (~40 codes). Full
-  # NAICS 2022 coverage (~1100 codes) is v0.2 data-only work; the
-  # data-file structure is designed to absorb the expansion without an
-  # interface change.
+  # Ships the full NAICS 2022 dictionary — all 1,012 6-digit codes with
+  # sector and subsector parents, sourced from the Census Bureau's official
+  # 2022 NAICS Structure file.
   class Naics
     attr_reader :code, :title, :sector_code, :sector_title,
                 :subsector_code, :subsector_title
@@ -64,8 +63,8 @@ module Contractkit
       code.hash
     end
 
-    # Path to the shipped NAICS 2022 JSON (see {Contractkit::Naics.all}).
-    DATA_PATH = File.expand_path("data/naics_2022.json", __dir__)
+    # Path to the shipped NAICS 2022 full data file (see {Contractkit::Naics.all}).
+    DATA_PATH = File.expand_path("data/naics_2022_full.json", __dir__)
 
     class << self
       # Returns the Naics value object for the given 6-digit code, or nil
@@ -108,8 +107,8 @@ module Contractkit
       end
     end
 
-    # Eagerly load at require-time per the AC. Memory cost is trivial
-    # (~40 entries × ~5 fields).
+    # Eagerly load at require-time. Memory cost is acceptable
+    # (~1,012 entries × ~5 fields ≈ trivial).
     all
   end
 end
